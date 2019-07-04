@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 
 
@@ -61,3 +62,12 @@ class Sale(models.Model):
 
     def __str__(self):
         return f'{self.date}, {self.value}, {self.seller.name}'
+
+    def save(self, *args, **kwargs):
+        plan = self.seller.plan
+        if Decimal(self.value) > plan.minimum_value:
+            self.commission = Decimal(self.value)*plan.higher_percentage
+        else:
+            self.commission = Decimal(self.value)*plan.lower_percentage
+
+        super().save(*args, **kwargs)
