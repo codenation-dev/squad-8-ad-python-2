@@ -3,9 +3,9 @@ from django.db import models
 
 class Plan(models.Model):
     name = models.CharField(max_length=50)
-    minimum_value = models.DecimalField(max_digits=6, decimal_places=2)
-    lower_percentage = models.DecimalField(max_digits=1, decimal_places=4)
-    higher_percentage = models.DecimalField(max_digits=1, decimal_places=4)
+    minimum_value = models.DecimalField(max_digits=7, decimal_places=2)
+    lower_percentage = models.DecimalField(max_digits=3, decimal_places=2)
+    higher_percentage = models.DecimalField(max_digits=3, decimal_places=2)
     
     def __str__(self):
         return f'{self.name}, {self.minimum_value}'
@@ -41,8 +41,8 @@ class Address(models.Model):
 
 class Sale(models.Model):
     date = models.DateField()
-    value = models.DecimalField(max_digits=6, decimal_places=2)  
-    commission = models.DecimalField(max_digits=5, 
+    value = models.DecimalField(max_digits=7, decimal_places=2)  
+    commission = models.DecimalField(max_digits=7, 
                                      decimal_places=2, 
                                      editable=False)   
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
