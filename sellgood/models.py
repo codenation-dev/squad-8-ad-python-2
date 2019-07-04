@@ -31,7 +31,9 @@ class Address(models.Model):
     number = models.CharField(max_length=7)
     complement = models.CharField(max_length=100)
     zipcode = models.CharField(max_length=8)
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    seller = models.OneToOneField(Seller, 
+                                  on_delete=models.CASCADE, 
+                                  primary_key=True)
 
     def __str__(self):
         return f'{self.seller.name}, {self.city}'
