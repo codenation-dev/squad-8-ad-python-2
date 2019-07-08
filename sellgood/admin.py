@@ -1,3 +1,27 @@
 from django.contrib import admin
 
-# Register your models here.
+from sellgood.models import Plan, Seller, Address, Sale
+
+
+class PlanAdmin(admin.ModelAdmin):
+    list_display = ('name', 'minimum_value', 
+                    'lower_percentage', 'higher_percentage')
+
+
+class SellerAdmin(admin.ModelAdmin):
+    list_display = ('cpf', 'name', 'age', 'phone', 'email', 'plan')
+
+
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ('street', 'neighborhood', 'city', 'state', 
+                    'number', 'complement', 'zipcode', 'seller')
+
+
+class SaleAdmin(admin.ModelAdmin):
+    list_display = ('date', 'value', 'commission', 'seller')
+
+
+admin.site.register(Plan, PlanAdmin)
+admin.site.register(Seller, SellerAdmin)
+admin.site.register(Address, AddressAdmin)
+admin.site.register(Sale, SaleAdmin)
