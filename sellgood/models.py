@@ -4,7 +4,7 @@ from django.db import models
 
 class Plan(models.Model):
     name = models.CharField(max_length=50)
-    minimum_value = models.DecimalField(max_digits=7, decimal_places=2)
+    minimum_amount = models.DecimalField(max_digits=7, decimal_places=2)
     lower_percentage = models.DecimalField(max_digits=3, decimal_places=2)
     higher_percentage = models.DecimalField(max_digits=3, decimal_places=2)
 
