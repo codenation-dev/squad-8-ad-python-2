@@ -24,17 +24,17 @@ def create_sale(request): # Create Sale
                                  comission=float(new_sale.comissions))
 
             # Since body content is valid, return response_body
-            return JsonResponse(response_body)
+            return JsonResponse(response_body, status=200)
 
         # Since body not valid, return errors       
         else:
-            return JsonResponse(form.errors)   
-                                       
+            return JsonResponse(form.errors, status=422)   
+
     else:  # If method is different from POST, return body_content
         body_content = {
             'error': 'Method not allowed'
         }
-        return JsonResponse(body_content)
+        return JsonResponse(body_content, status=405)
 
 
 @csrf_exempt
