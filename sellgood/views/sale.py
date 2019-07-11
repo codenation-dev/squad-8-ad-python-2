@@ -71,7 +71,7 @@ def update_delete_sale(request, id_sale):
         try:   # Check if the sale exists
             sale_to_delete = Sale.objects.get(pk=id_sale)
         except:    # Returns an error in JSON format if sale doesn't exist
-            return JsonResponse({'error':'sale_id not found'})
+            return JsonResponse({'error':'sale_id not found'}, status=422)
         else:       # If sale exists, delete.
             sale_to_delete.delete()
 
@@ -92,27 +92,12 @@ def update_delete_sale(request, id_sale):
 @csrf_exempt
 def sale_list_seller(request, id_seller):
     if request.method == 'GET':
-        seller_sale = Sale.objects.filter(seller_id=id_seller)
+        seller_sale = Sale.objects.filter(seller_id=id_seller).values('comissions', 'date', 'amount', 'seller__name', 'seller_id')
 
         if not seller_sale:        # Return error if seller_id doesn't exist
             return JsonResponse({'error': 'seller_id not found'}, status=422)
 
-        sales = list()
-        for sale in seller_sale:    # Append sales to list sales
-            sale_json = {
-                'comissions': float(sale.comissions),
-                'date': sale.date.strftime('%m-%Y'),
-                'amount': float(sale.amount),
-                'seller': sale.seller.name,
-                'seller_id': sale.seller_id
-            }
-            sales.append(sale_json)
-        sales_json = json.dumps(sales)   # Convert list to json
-
-        return HttpResponse(
-            sales_json,
-            content_type = 'application/json',
-        )
+        return JsonResponse({'seller_sales': list(seller_sale)})
 
     else:  # If method is not GET, return body_content
         body_content = {
@@ -124,25 +109,13 @@ def sale_list_seller(request, id_seller):
 @csrf_exempt
 def list_sales_month(request, month):
     if request.method == 'GET':
-        sales = list()
-        sales_month = Sale.objects.filter(date__month=month)
+        sales_month = Sale.objects.filter(date__month=month).values('id', 
+                                        'date', 'amount', 'comissions', 'seller__name', 'seller_id')
         if not sales_month:
             return JsonResponse({'error': 'Empty month'})
 
-        for obj in sales_month:
-            sale = {
-                'value': float(obj.amount),
-                'date': obj.date.strftime('%m-%Y'),
-                'comission': float(obj.comissions),
-                'seller_name': obj.seller.name,
-                'seller_id': obj.seller_id
-            }
-            sales.append(sale)
+        return JsonResponse({'sales_month': list(sales_month)})
 
-        sales_json = json.dumps(sales)
-        
-        return HttpResponse(sales_json, content_type='application/json',
-                            status=202)
     else:
         body_content = {
             'error': 'Method not allowed'}
