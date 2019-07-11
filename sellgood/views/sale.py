@@ -19,3 +19,17 @@ def create_sale(request):
                 status=200)
 
 
+@csrf_exempt
+def update_sale(request, id_sale):
+    sale_upd_info = json.loads(request.body)
+    sale_to_update = Sale.objects.filter(pk=id_sale)
+    for obj in sale_to_update:
+        obj.date = sale_upd_info['date']
+        obj.amount = sale_upd_info['amount']
+        obj.save()
+    response = {
+        'sale_id': id_sale
+    }
+
+    return HttpResponse(json.dumps(response),content_type='application/json',
+                        status=205)
