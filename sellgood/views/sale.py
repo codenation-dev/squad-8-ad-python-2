@@ -94,3 +94,35 @@ def update_delete_sale(request, id_sale):
             'error': 'Method not allowed'
         }
         return JsonResponse(body_content, status=405)
+
+
+@csrf_exempt
+def sale_list_seller(request, id_seller):
+    if request.method == 'GET':
+        seller_sale = Sale.objects.filter(seller_id=id_seller)
+
+        if not seller_sale:        # Return error if seller_id doesn't exist
+            return JsonResponse({'error': 'seller_id not found'}, status=422)
+
+        sales = list()
+        for sale in seller_sale:    # Append sales to list sales
+            sale_json = {
+                'comissions': float(sale.comissions),
+                'date': sale.date.strftime('%m-%Y'),
+                'amount': float(sale.amount),
+                'seller': sale.seller.name,
+                'seller_id': sale.seller_id
+            }
+            sales.append(sale_json)
+        sales_json = json.dumps(sales)   # Convert list to json
+
+        return HttpResponse(
+            sales_json,
+            content_type = 'application/json',
+        )
+
+    else:  # If method is not GET, return body_content
+        body_content = {
+            'error': 'Method not allowed'
+            }
+        return JsonResponse(body_content, status=405)
