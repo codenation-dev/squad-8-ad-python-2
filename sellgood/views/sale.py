@@ -32,20 +32,9 @@ def create_read_sale(request):  # Create Sale
             return JsonResponse(form.errors, status=422)   
 
     elif request.method == 'GET':  # If request method == GET Return Sale List
-        sales_list = list()
-
-        for sale in Sale.objects.all():
-            sale_json = {
-                'date': sale.date.strftime('%m-%Y'),
-                'amount': float(sale.amount),
-                'seller': sale.seller.name,
-                'seller_id': sale.seller_id
-            }
-            sales_list.append(sale_json)
-        sales_json = json.dumps(sales_list)
-
-        return HttpResponse(sales_json, 
-                            content_type = 'application/json', status=200)
+        sales =  Sale.objects.all().values('id', 'date', 'amount', 'comissions',                                'seller__name', 'seller_id')
+        
+        return JsonResponse({'sales': list(sales)}, status=200)
 
 
     else:  # If method is not POST OR GET, return body_content
