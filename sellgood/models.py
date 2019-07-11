@@ -4,7 +4,7 @@ from django.db import models
 
 class Plan(models.Model):
     name = models.CharField(max_length=50)
-    minimum_value = models.DecimalField(max_digits=7, decimal_places=2)
+    minimum_amount = models.DecimalField(max_digits=7, decimal_places=2)
     lower_percentage = models.DecimalField(max_digits=3, decimal_places=2)
     higher_percentage = models.DecimalField(max_digits=3, decimal_places=2)
 
@@ -51,7 +51,7 @@ class Address(models.Model):
 
 class Sale(models.Model):
     date = models.DateField()
-    value = models.DecimalField(max_digits=7, decimal_places=2)  
+    amount = models.DecimalField(max_digits=7, decimal_places=2)  
     commission = models.DecimalField(max_digits=7, 
                                      decimal_places=2, 
                                      editable=False)   
@@ -61,13 +61,13 @@ class Sale(models.Model):
         ordering = ['date']
 
     def __str__(self):
-        return f'{self.date}, {self.value}, {self.seller.name}'
+        return f'{self.date}, {self.amount}, {self.seller.name}'
 
     def save(self, *args, **kwargs):
         plan = self.seller.plan
-        if Decimal(self.value) > plan.minimum_value:
-            self.commission = Decimal(self.value)*plan.higher_percentage
+        if Decimal(self.amount) > plan.minimum_amount:
+            self.commission = Decimal(self.amount)*plan.higher_percentage
         else:
-            self.commission = Decimal(self.value)*plan.lower_percentage
+            self.commission = Decimal(self.amount)*plan.lower_percentage
 
         super().save(*args, **kwargs)
