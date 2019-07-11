@@ -48,7 +48,7 @@ def create_read_sale(request):  # Create Sale
                             content_type = 'application/json', status=200)
 
 
-    else:  # If method is different from POST, return body_content
+    else:  # If method is not POST OR GET, return body_content
         body_content = {
             'error': 'Method not allowed'
         }
@@ -56,7 +56,7 @@ def create_read_sale(request):  # Create Sale
 
 
 @csrf_exempt
-def update_sale(request, id_sale):
+def update_delete_sale(request, id_sale):
     if request.method == 'PUT':   # Check request method
         sale_info = json.loads(request.body)
         form = SaleForm(sale_info)
@@ -77,7 +77,18 @@ def update_sale(request, id_sale):
         else:
             return JsonResponse(form.errors, status=422)
 
-    # If method is different from PUT, return body_content        
+        # If request method == DELETE; Delete Sale
+        elif request.method == 'DELETE': 
+                sale_to_delete = Sale.objects.get(pk=id_sale)
+                sale_to_delete.delete()
+
+                response_body = {
+                    'id_sale_deleted': id_sale
+                    }
+
+                return JsonResponse(response_body, status=200)
+
+    # If method is not PUT or DELETE, return body_content        
     else:
         body_content = {
             'error': 'Method not allowed'
