@@ -182,3 +182,30 @@ def list_sales_year(request, year):
         body_content = {
             'error': 'Method not allowed'}
         return JsonResponse(body_content, status=405)
+
+@csrf_exempt
+def list_sales_year_month(request, year, month):
+    if request.method == 'GET':
+        sales = list()
+        sales_ym = Sale.objects.filter(date__year=year, date__month=month)
+        if not sales_ym:
+            return JsonResponse({'error': 'Empty year or empty month'})
+    
+        for obj in sales_ym:
+            sale = {
+                'value': float(obj.amount),
+                'date': obj.date.strftime('%m-%Y'),
+                'comission': float(obj.comissions),
+                'seller_name': obj.seller.name,
+                'seller_id': obj.seller_id
+            }
+            sales.append(sale)
+
+        sales_json = json.dumps(sales)
+
+        return HttpResponse(sales_json, content_type='application/json',
+                            status=202)
+    else:
+        body_content = {
+            'error': 'Method not allowed'}
+        return JsonResponse(body_content, status=405)
