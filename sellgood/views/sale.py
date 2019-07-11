@@ -7,7 +7,7 @@ import json
 
 
 @csrf_exempt
-def create_sale(request):  # Create Sale
+def create_read_sale(request):  # Create Sale
     if request.method == 'POST':  # Check request method
         sale_info = json.loads(request.body)
         form = SaleForm(sale_info)
@@ -30,6 +30,23 @@ def create_sale(request):  # Create Sale
         # Since body not valid, return errors       
         else:
             return JsonResponse(form.errors, status=422)   
+
+     elif request.method == 'GET':  # If request method == GET Return Sale List
+        sales_list = list()
+
+        for sale in Sale.objects.all():
+            sale_json = {
+                'date': sale.date.strftime('%m-%Y'),
+                'amount': float(sale.amount),
+                'seller': sale.seller.name,
+                'seller_id': sale.seller_id
+            }
+            sales_list.append(sale_json)
+        sales_json = json.dumps(sales_list)
+
+        return HttpResponse(sales_json, 
+                            content_type = 'application/json', status=200)
+
 
     else:  # If method is different from POST, return body_content
         body_content = {
