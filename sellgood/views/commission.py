@@ -44,7 +44,7 @@ def rank_year_month(request, year, month):
                 .values('date', 'commission', 'seller__name'))
     if not rank:
         return JsonResponse(
-            {'error': f'rank of year {year} or month {month} not found'}, 
+            {'error': f'rank of year {year} and month {month} not found'}, 
             status=404)
     return JsonResponse({'rank_year_month': list(rank)})
     
