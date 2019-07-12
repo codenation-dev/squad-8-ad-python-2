@@ -120,3 +120,51 @@ class RankYearViewTests(TestCase):
             for next in response.json()['rank_year'][idx+1:]:                
                 self.assertGreaterEqual(Decimal(previous['commission']), 
                                         Decimal(next['commission']))
+
+
+class RankMonthViewTests(TestCase):
+    def setUp(self):
+        self.cliente = Client()
+
+        seller1, seller2 = create_sellers()
+
+        Sale.objects.create(date='2018-01-17', 
+                            value=55000.00, 
+                            seller=seller2) 
+
+        Sale.objects.create(date='2019-12-01', 
+                            value=50000.00, 
+                            seller=seller1)        
+
+        Sale.objects.create(date='2019-01-13', 
+                            value=1500.77, 
+                            seller=seller1)
+
+        Sale.objects.create(date='2019-01-22', 
+                            value=44900.77, 
+                            seller=seller2)
+
+    def test_no_records(self):        
+        response = self.client.get(reverse('sellgood:rank_month', 
+                                           kwargs={'month': 4}))
+        
+        self.assertEqual(response.status_code, 404)              
+        self.assertEqual(response.json()['error'], 
+                         'rank of month 4 not found')
+            
+    def test_number_of_records(self):
+        response = self.client.get(reverse('sellgood:rank_month', 
+                                           kwargs={'month': 1}))
+
+        self.assertEqual(response.status_code, 200)              
+        self.assertEqual(len(response.json()['rank_month']), 3)
+
+    def test_commissions_order(self):        
+        response = self.client.get(reverse('sellgood:rank_month', 
+                                           kwargs={'month': 1}))     
+        
+        self.assertEqual(response.status_code, 200)               
+        for idx, previous in enumerate(response.json()['rank_month']):         
+            for next in response.json()['rank_month'][idx+1:]:                
+                self.assertGreaterEqual(Decimal(previous['commission']), 
+                                        Decimal(next['commission']))
