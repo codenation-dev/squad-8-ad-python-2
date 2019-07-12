@@ -4,7 +4,7 @@ from sellgood.models import Plan, Seller, Address, Sale
 
 
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ('name', 'minimum_value', 
+    list_display = ('name', 'minimum_amount', 
                     'lower_percentage', 'higher_percentage')
 
 
@@ -18,7 +18,7 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class SaleAdmin(admin.ModelAdmin):
-    list_display = ('date', 'value', 'commission', 'seller')
+    list_display = ('date', 'amount', 'commission', 'seller')
 
 
 admin.site.register(Plan, PlanAdmin)
