@@ -3,6 +3,7 @@ from django.urls import path, re_path
 from .views import commission
 
 
+app_name='sellgood'
 urlpatterns = [
     path('commission/rank/', commission.rank, name='rank'),
     re_path(r'commission/rank/(?P<year>\d{4})$', 
