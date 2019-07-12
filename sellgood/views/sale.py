@@ -59,7 +59,7 @@ def update_delete_sale(request, id_sale):
             }
 
              # Return updated_sale id 
-            return JsonResponse(response, status=200)
+            return JsonResponse(body_content, status=200)
             
         # Since body not valid, return errors    
         else:
