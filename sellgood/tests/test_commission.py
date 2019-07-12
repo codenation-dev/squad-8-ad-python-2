@@ -209,7 +209,7 @@ class RankYearMonthViewTests(TestCase):
 
     def test_commissions_order(self):        
         response = self.client.get(reverse('sellgood:rank_year_month', 
-                                           kwargs={'year': 2019, 'month': 1}))     
+                                           kwargs={'year': 2019, 'month': 1})) 
         
         self.assertEqual(response.status_code, 200)               
         for idx, previous in enumerate(response.json()['rank_year_month']):    
