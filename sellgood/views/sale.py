@@ -91,7 +91,7 @@ def update_delete_sale(request, id_sale):
 @csrf_exempt
 def sale_list_seller(request, id_seller):
     if request.method == 'GET':
-        seller_sale = Sale.objects.filter(seller_id=id_seller).values('commission', 'date', 'amount', 'seller__name', 'seller_id')
+        seller_sale = Sale.objects.filter(seller_id=id_seller).values('id',                                         'commission', 'date', 'amount',                                             'seller__name', 'seller_id')
 
         if not seller_sale:        # Return error if seller_id doesn't exist
             return JsonResponse({'error': 'seller_id not found'}, status=422)
