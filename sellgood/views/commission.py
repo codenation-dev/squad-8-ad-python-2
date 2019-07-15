@@ -12,7 +12,7 @@ def rank(request):
                 .values('date', 'commission', 'seller__name'))
     if not rank:
         return JsonResponse({'error': 'rank not found'}, status=404)
-    return JsonResponse({'rank': list(rank)})
+    return JsonResponse({'commission_rank': list(rank)})
 
 
 def rank_year(request, year):
@@ -23,7 +23,7 @@ def rank_year(request, year):
     if not rank:
         return JsonResponse({'error': f'rank of year {year} not found'},
                             status=404)
-    return JsonResponse({'rank_year': list(rank)})
+    return JsonResponse({'commission_rank_year': list(rank)})
 
 
 def rank_month(request, month):
@@ -34,7 +34,7 @@ def rank_month(request, month):
     if not rank:
         return JsonResponse({'error': f'rank of month {month} not found'},
                             status=404)
-    return JsonResponse({'rank_month': list(rank)})
+    return JsonResponse({'commission_rank_month': list(rank)})
 
 
 def rank_year_month(request, year, month):
@@ -46,5 +46,5 @@ def rank_year_month(request, year, month):
         return JsonResponse(
             {'error': f'rank of year {year} and month {month} not found'}, 
             status=404)
-    return JsonResponse({'rank_year_month': list(rank)})
+    return JsonResponse({'commission_rank_year_month': list(rank)})
     
