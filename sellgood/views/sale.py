@@ -68,7 +68,7 @@ def update_delete_sale(request, id_sale):
     elif request.method == 'DELETE': 
         try:   # Check if the sale exists
             sale_to_delete = Sale.objects.get(pk=id_sale)
-        except:    # Returns an error in JSON format if sale doesn't exist
+        except Sale.DoesNotExist:    # Returns an error if sale doesn't exist
             return JsonResponse({'error':'sale_id not found'}, status=422)
         else:       # If sale exists, delete.
             sale_to_delete.delete()
