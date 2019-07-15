@@ -33,7 +33,7 @@ def create_read_sale(request):  # Create Sale
     elif request.method == 'GET':  # If request method == GET Return Sale List
         sales =  Sale.objects.all().values('id', 'date', 'amount',                                                  'seller__name', 'seller_id')
         if not sales:
-            return JsonResponse({'error': "no sales recorded" })
+            return JsonResponse({'error': "no sales recorded" }, status=404)
 
         return JsonResponse({'sales': list(sales)}, status=200)
 
@@ -65,7 +65,7 @@ def update_delete_sale(request, id_sale):
         try:   # Check if the sale exists
             sale_to_delete = Sale.objects.get(pk=id_sale)
         except Sale.DoesNotExist:    # Returns an error if sale doesn't exist
-            return JsonResponse({'error':'sale_id not found'}, status=422)
+            return JsonResponse({'error':'sale_id not found'}, status=404)
         else:       # If sale exists, delete.
             sale_to_delete.delete()
             return JsonResponse({'id_sale_deleted': id_sale}, status=200)
@@ -81,7 +81,7 @@ def sale_list_seller(request, id_seller):
         seller_sale = Sale.objects.filter(seller_id=id_seller).values('id',                                                         'date', 'amount',                                            'seller__name', 'seller_id')
 
         if not seller_sale:        # Return error if seller_id doesn't exist
-            return JsonResponse({'error': 'seller_id not found'}, status=422)
+            return JsonResponse({'error': 'seller_id not found'}, status=404)
 
         return JsonResponse({'seller_sales': list(seller_sale)})
 
@@ -95,7 +95,7 @@ def list_sales_month(request, month):
         sales_month = Sale.objects.filter(date__month=month).values('id', 
                                         'date', 'amount', 'seller__name',                           'seller_id')
         if not sales_month:
-            return JsonResponse({'error': 'Empty month'})
+            return JsonResponse({'error': 'Empty month'}, status=404)
 
         return JsonResponse({'sales_month': list(sales_month)})
 
@@ -109,7 +109,7 @@ def list_sales_year(request, year):
         sales_year = Sale.objects.filter(date__year=year).values('id', 
                                         'date', 'amount', 'seller__name',                       'seller_id')
         if not sales_year:
-            return JsonResponse({'error': 'Empty year'})
+            return JsonResponse({'error': 'Empty year'}, status=404)
     
         return JsonResponse({'sales_year': list(sales_year)}, status=200)
 
@@ -122,7 +122,7 @@ def list_sales_year_month(request, year, month):
         sales_ym = Sale.objects.filter(date__year=year, 
                         date__month=month).values('id', 'date', 'amount',                               'seller__name', 'seller_id')
         if not sales_ym:
-            return JsonResponse({'error': 'Empty year or empty month'})
+            return JsonResponse({'error': 'Empty year or empty month'},                             status=404)
             
         return JsonResponse({'sale_year_month': list(sales_ym)}, status=200)
 
