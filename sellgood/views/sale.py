@@ -21,11 +21,10 @@ def create_read_sale(request):  # Create Sale
                     date=date, amount=amount, seller=seller)
 
             # Body content when form is valid.
-            response_body = dict(Seller=new_sale.seller_id, 
-                                 commission=float(new_sale.commission))
+            new_sale_info = Sale.objects.filter(pk=new_sale.id).values('id',                                                'seller', 'amount')
 
             # Since body content is valid, return response_body
-            return JsonResponse(response_body, status=200)
+            return JsonResponse({'New Sale Info': list(new_sale_info)},                             status=200)
 
         # Since body not valid, return errors       
         else:
