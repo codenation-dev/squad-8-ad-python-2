@@ -34,14 +34,11 @@ def create_read_sale(request):  # Create Sale
         sales =  Sale.objects.all().values('id', 'date', 'amount',                                                  'seller__name', 'seller_id')
         if not sales:
             return JsonResponse({'error': "no sales recorded" })
-            
+
         return JsonResponse({'sales': list(sales)}, status=200)
 
     else:  # If method is not POST OR GET, return body_content
-        body_content = {
-            'error': 'Method not allowed'
-        }
-        return JsonResponse(body_content, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
 @csrf_exempt
@@ -55,12 +52,9 @@ def update_delete_sale(request, id_sale):
             sale_to_update.amount = form.cleaned_data['amount']
             sale_to_update.seller = form.cleaned_data['seller']
             sale_to_update.save()
-            body_content = {
-                'sale_id': id_sale
-            }
 
              # Return updated_sale id 
-            return JsonResponse(body_content, status=200)
+            return JsonResponse({'updated_sale_id': id_sale}, status=200)
             
         # Since body not valid, return errors    
         else:
@@ -74,19 +68,11 @@ def update_delete_sale(request, id_sale):
             return JsonResponse({'error':'sale_id not found'}, status=422)
         else:       # If sale exists, delete.
             sale_to_delete.delete()
-
-            response_body = {
-                'id_sale_deleted': id_sale
-                }
-
-            return JsonResponse(response_body, status=200)
+            return JsonResponse({'id_sale_deleted': id_sale}, status=200)
 
     # If method is not PUT or DELETE, return body_content        
     else:
-        body_content = {
-            'error': 'Method not allowed'
-        }
-        return JsonResponse(body_content, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
 @csrf_exempt
@@ -100,10 +86,7 @@ def sale_list_seller(request, id_seller):
         return JsonResponse({'seller_sales': list(seller_sale)})
 
     else:  # If method is not GET, return body_content
-        body_content = {
-            'error': 'Method not allowed'
-            }
-        return JsonResponse(body_content, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
 @csrf_exempt
@@ -117,9 +100,7 @@ def list_sales_month(request, month):
         return JsonResponse({'sales_month': list(sales_month)})
 
     else:
-        body_content = {
-            'error': 'Method not allowed'}
-        return JsonResponse(body_content, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
 @csrf_exempt
@@ -133,9 +114,7 @@ def list_sales_year(request, year):
         return JsonResponse({'sales_year': list(sales_year)}, status=200)
 
     else:
-        body_content = {
-            'error': 'Method not allowed'}
-        return JsonResponse(body_content, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 @csrf_exempt
 def list_sales_year_month(request, year, month):
@@ -148,6 +127,4 @@ def list_sales_year_month(request, year, month):
         return JsonResponse({'sale_year_month': list(sales_ym)}, status=200)
 
     else:
-        body_content = {
-            'error': 'Method not allowed'}
-        return JsonResponse(body_content, status=405)
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
