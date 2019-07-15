@@ -83,7 +83,7 @@ def sale_list_seller(request, id_seller):
         if not seller_sale:        # Return error if seller_id doesn't exist
             return JsonResponse({'error': 'seller_id not found'}, status=404)
 
-        return JsonResponse({'seller_sales': list(seller_sale)})
+        return JsonResponse({'seller_sales': list(seller_sale)}, status=200)
 
     else:  # If method is not GET, return body_content
         return JsonResponse({'error': 'Method not allowed'}, status=405)
@@ -97,7 +97,7 @@ def list_sales_month(request, month):
         if not sales_month:
             return JsonResponse({'error': 'Empty month'}, status=404)
 
-        return JsonResponse({'sales_month': list(sales_month)})
+        return JsonResponse({'sales_month': list(sales_month)}, status=200)
 
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
