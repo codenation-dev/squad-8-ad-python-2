@@ -32,7 +32,9 @@ def create_read_sale(request):  # Create Sale
 
     elif request.method == 'GET':  # If request method == GET Return Sale List
         sales =  Sale.objects.all().values('id', 'date', 'amount',                                                  'seller__name', 'seller_id')
-        
+        if not sales:
+            return JsonResponse({'error': "no sales recorded" })
+            
         return JsonResponse({'sales': list(sales)}, status=200)
 
     else:  # If method is not POST OR GET, return body_content
