@@ -17,8 +17,7 @@ urlpatterns = [
             name='sale_rank_year'),
     re_path(r'sale/rank/(?P<year>\d{4})/(?P<month>\d{2}$)',   
             sale.list_sales_year_month,                       
-            name='sale_rank_year_month')  
-  
+            name='sale_rank_year_month'),  
     # Commissions urls
     path('commission/rank/', commission.rank, name='rank'),
     re_path(r'commission/rank/(?P<year>\d{4})$', 
@@ -30,3 +29,4 @@ urlpatterns = [
     path('commission/rank/<int:year>/<int:month>', 
          commission.rank_year_month, 
          name='rank_year_month')
+]
