@@ -53,8 +53,9 @@ def update_delete_sale(request, id_sale):
             sale_to_update.seller = form.cleaned_data['seller']
             sale_to_update.save()
 
+            sale_info = Sale.objects.filter(pk=sale_to_update.id).values('id')
              # Return updated_sale id 
-            return JsonResponse({'updated_sale_id': id_sale}, status=200)
+            return JsonResponse({'id_sale_updated': list(sale_info)},                               status=200)
             
         # Since body not valid, return errors    
         else:
