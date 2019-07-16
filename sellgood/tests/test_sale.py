@@ -54,7 +54,7 @@ class CreateReadSale(TestCase):
             "amount": 9191.19,
             "seller": 1,
             }
-        response = self.client.post(reverse('sellgood:sale_create_read'),                                  data=json.dumps(data),                                                  content_type='application/json')
+        response = self.client.post(reverse('sellgood:sale_create_read'),                                   data=json.dumps(data),                                                  content_type='application/json')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['New Sale Info'][0]['id'], 1)
@@ -69,12 +69,14 @@ class CreateReadSale(TestCase):
 
     def test_method_not_allowed(self):
         put_response = self.client.put(reverse('sellgood:sale_create_read'))
-        delete_response = self.client.delete(reverse                                                                ('sellgood:sale_create_read')) 
+        delete_response = self.client.delete(reverse(
+            'sellgood:sale_create_read')) 
 
         self.assertEqual(put_response.status_code, 405)
         self.assertEqual(delete_response.status_code, 405)
         self.assertListEqual([put_response.json()['error'], 
-                            delete_response.json()['error']], ['Method not allowed', 'Method not allowed'])
+                              delete_response.json()['error']], 
+                             ['Method not allowed', 'Method not allowed'])
     
     def test_number_sales_recorded(self):
         sale1, sale2, sale3 = create_sales()
@@ -97,8 +99,10 @@ class UpdateDeleteSales(TestCase):
             "seller": 2
             }
         
-        response = self.client.put(reverse('sellgood:sale_update_delete',                                                   kwargs={'id_sale': 1}),  
-                                     data=json.dumps(new_sale), content_type='application/json')
+        response = self.client.put(reverse(
+            'sellgood:sale_update_delete',                                      kwargs={'id_sale': 1}),
+            data=json.dumps(new_sale),
+            content_type='application/json')
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['id_sale_updated'][0]['id'], 1)
@@ -120,11 +124,11 @@ class UpdateDeleteSales(TestCase):
         get_response = self.client.get(reverse('sellgood:sale_update_delete',                                          kwargs={'id_sale': 1}))
         post_response = self.client.post(reverse('sellgood:sale_update_delete',                                          kwargs={'id_sale': 1}))
 
-        self.assertListEqual([get_response.status_code,                                             post_response.status_code],
-                            [405, 405])
+        self.assertListEqual([get_response.status_code,                                              post_response.status_code],
+                             [405, 405])
         self.assertListEqual([get_response.json()['error'], 
-                            post_response.json()['error']], 
-                            ['Method not allowed', 'Method not allowed'])
+                             post_response.json()['error']], 
+                             ['Method not allowed', 'Method not allowed'])
 
 
 class SaleListSeller(TestCase):
@@ -134,39 +138,39 @@ class SaleListSeller(TestCase):
 
     def test_seller_not_found(self):
         response = self.client.get(reverse('sellgood:sale_seller_read', 
-                                    kwargs= {'id_seller': 8}))
+                                           kwargs= {'id_seller': 8}))
 
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json()['error'], 'seller_id not found')
 
     def test_number_seles_seller(self):
         response_s1 = self.client.get(reverse('sellgood:sale_seller_read',
-                                            kwargs= {'id_seller': 1}))
+                                              kwargs= {'id_seller': 1}))
         response_s2 = self.client.get(reverse('sellgood:sale_seller_read',
-                                            kwargs= {'id_seller': 2}))
+                                              kwargs= {'id_seller': 2}))
 
         self.assertListEqual([response_s1.status_code, response_s2.status_code],
-                        [200, 200])
+                             [200, 200])
         self.assertListEqual([len(response_s1.json()['seller_sales']), 
                               len(response_s2.json()['seller_sales'])],
                               [2, 1])
 
     def test_method_not_allowed(self):
         post_response = self.client.post(reverse('sellgood:sale_seller_read',
-                                            kwargs= {'id_seller': 1}))
+                                                 kwargs= {'id_seller': 1}))
         put_response = self.client.put(reverse('sellgood:sale_seller_read',
-                                            kwargs= {'id_seller': 1}))
-        delete_response = self.client.delete(
-                                        reverse('sellgood:sale_seller_read',
-                                        kwargs= {'id_seller': 1}))
+                                                 kwargs= {'id_seller': 1}))
+        delete_response = self.client.delete(reverse(
+            'sellgood:sale_seller_read',
+            kwargs= {'id_seller': 1}))
 
         self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
                              delete_response.status_code],
                              [405, 405, 405])
         self.assertListEqual([post_response.json()['error'], 
-                            put_response.json()['error'], 
-                            delete_response.json()['error']],
-                            ['Method not allowed', 'Method not allowed', 'Method not allowed'])
+                             put_response.json()['error'], 
+                             delete_response.json()['error']],
+                             ['Method not allowed', 'Method not allowed', 'Method not allowed'])
 
 
 class SalesRankMonth(TestCase):
@@ -183,31 +187,31 @@ class SalesRankMonth(TestCase):
 
     def test_number_of_sales_month(self):
         response_jan = self.client.get(reverse('sellgood:sale_rank_month', 
-                                            kwargs={'month': 1}))
+                                                kwargs={'month': 1}))
         response_feb = self.client.get(reverse('sellgood:sale_rank_month', 
-                                            kwargs={'month': 2}))
+                                                kwargs={'month': 2}))
 
         self.assertListEqual([response_jan.status_code,                                              response_feb.status_code],
-                            [200, 200])
-        self.assertListEqual([len(response_jan.json()['sales_month']),                              len(response_feb.json()['sales_month'])],
-                            [2, 1])
+                             [200, 200])
+        self.assertListEqual([len(response_jan.json()['sales_month']),                               len(response_feb.json()['sales_month'])],
+                             [2, 1])
 
     def test_method_not_allowed(self):
         post_response = self.client.post(reverse('sellgood:sale_rank_month',
-                                            kwargs= {'month': 1}))
+                                                 kwargs= {'month': 1}))
         put_response = self.client.put(reverse('sellgood:sale_rank_month',
-                                            kwargs= {'month': 1}))
-        delete_response = self.client.delete(
-                                        reverse('sellgood:sale_rank_month',
-                                        kwargs= {'month': 1}))
+                                                kwargs= {'month': 1}))
+        delete_response = self.client.delete(reverse(
+            'sellgood:sale_rank_month',
+            kwargs= {'month': 1}))
 
         self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
                              delete_response.status_code],
                              [405, 405, 405])
         self.assertListEqual([post_response.json()['error'], 
-                            put_response.json()['error'], 
-                            delete_response.json()['error']],
-                            ['Method not allowed', 'Method not allowed', 'Method not allowed'])
+                             put_response.json()['error'], 
+                             delete_response.json()['error']],
+                             ['Method not allowed', 'Method not allowed', 'Method not allowed'])
 
 
 class SalesRankYear(TestCase):
@@ -232,20 +236,20 @@ class SalesRankYear(TestCase):
 
     def test_method_not_allowed(self):
         post_response = self.client.post(reverse('sellgood:sale_rank_year',
-                                            kwargs= {'year': 2020}))
+                                                 kwargs= {'year': 2020}))
         put_response = self.client.put(reverse('sellgood:sale_rank_year',
-                                            kwargs= {'year': 2020}))
-        delete_response = self.client.delete(
-                                        reverse('sellgood:sale_rank_year',
-                                        kwargs= {'year': 2020}))
+                                                kwargs= {'year': 2020}))
+        delete_response = self.client.delete(reverse(
+            'sellgood:sale_rank_year',
+            kwargs= {'year': 2020}))
 
         self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
                              delete_response.status_code],
                              [405, 405, 405])
         self.assertListEqual([post_response.json()['error'], 
-                            put_response.json()['error'], 
-                            delete_response.json()['error']],
-                            ['Method not allowed', 'Method not allowed', 'Method not allowed'])
+                             put_response.json()['error'], 
+                             delete_response.json()['error']],
+                             ['Method not allowed', 'Method not allowed', 'Method not allowed'])
 
 
 class SalesRankYearMonth(TestCase):
@@ -268,18 +272,20 @@ class SalesRankYearMonth(TestCase):
         self.assertEqual(len(response.json()['sale_year_month']), 2)
 
     def test_method_not_allowed(self):
-        post_response = self.client.post(reverse                                                                ('sellgood:sale_rank_year_month',
-                                        kwargs={'year': 2020, 'month': 1}))
-        put_response = self.client.put(reverse('sellgood:sale_rank_year_month',
-                                            kwargs={'year': 2020, 'month': 1}))
-        delete_response = self.client.delete(
-                                        reverse('sellgood:sale_rank_year_month',
-                                        kwargs={'year': 2020, 'month': 1}))
+        post_response = self.client.post(reverse(
+            'sellgood:sale_rank_year_month',
+            kwargs={'year': 2020, 'month': 1}))
+        put_response = self.client.put(reverse(
+            'sellgood:sale_rank_year_month',
+            kwargs={'year': 2020, 'month': 1}))
+        delete_response = self.client.delete(reverse(
+            'sellgood:sale_rank_year_month',
+            kwargs={'year': 2020, 'month': 1}))
 
         self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
                              delete_response.status_code],
                              [405, 405, 405])
         self.assertListEqual([post_response.json()['error'], 
-                            put_response.json()['error'], 
-                            delete_response.json()['error']],
-                            ['Method not allowed', 'Method not allowed', 'Method not allowed'])
+                             put_response.json()['error'], 
+                             delete_response.json()['error']],
+                             ['Method not allowed', 'Method not allowed', 'Method not allowed'])
