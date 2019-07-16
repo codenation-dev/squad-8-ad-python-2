@@ -5,7 +5,7 @@ from sellgood.views import sale
 
 app_name='sellgood'
 urlpatterns = [
-    # Sales urls
+    # sales urls
     path('sale', sale.create_read_sale, name='sale_create_read'),
     path('sale/<int:id_sale>', sale.update_delete_sale,
          name='sale_update_delete'),
@@ -18,15 +18,15 @@ urlpatterns = [
     re_path(r'sale/rank/(?P<year>\d{4})/(?P<month>\d{1,2}$)',   
             sale.list_sales_year_month,                       
             name='sale_rank_year_month'),  
-    # Commissions urls
-    path('commission/rank/', commission.rank, name='rank'),
+    # commissions urls
+    path('commission/rank/', commission.rank, name='commission_rank'),
     re_path(r'commission/rank/(?P<year>\d{4})$', 
             commission.rank_year, 
-            name='rank_year'),
+            name='commission_rank_year'),
     re_path(r'commission/rank/(?P<month>\d{1,2})$', 
             commission.rank_month, 
-            name='rank_month'), 
+            name='commission_rank_month'), 
     path('commission/rank/<int:year>/<int:month>', 
          commission.rank_year_month, 
-         name='rank_year_month')
+         name='commission_rank_year_month')
 ]
