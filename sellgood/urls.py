@@ -7,15 +7,15 @@ app_name='sellgood'
 urlpatterns = [
     # sales urls
     path('sale', sale.create_read_sale, name='sale_create_read'),
-    path('sale/<int:id_sale>', sale.update_delete_sale,                             
+    path('sale/<int:id_sale>', sale.update_delete_sale,
          name='sale_update_delete'),
     path('sale/seller/<int:id_seller>', sale.sale_list_seller,
          name='sale_seller_read'),
-    re_path(r'sale/rank/(?P<month>\d{2}$)', sale.list_sales_month,
+    re_path(r'sale/rank/(?P<month>\d{1,2}$)', sale.list_sales_month,      
             name='sale_rank_month'),
     re_path(r'sale/rank/(?P<year>\d{4}$)', sale.list_sales_year,
             name='sale_rank_year'),
-    re_path(r'sale/rank/(?P<year>\d{4})/(?P<month>\d{2}$)',   
+    re_path(r'sale/rank/(?P<year>\d{4})/(?P<month>\d{1,2}$)',   
             sale.list_sales_year_month,                       
             name='sale_rank_year_month'),  
     # commissions urls
