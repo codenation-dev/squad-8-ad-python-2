@@ -83,3 +83,45 @@ class CreateReadSale(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()["sales"]), 3)
+
+
+class UpdateDeleteSales(TestCase):
+    def setUp(self):
+        self.client= Client()
+        self.sale1, self.sale2, self.sale3 = create_sales()
+
+    def test_update_sale(self):
+        new_sale = {
+            'date': "2040-01-31",
+            "amount": 25000.00,
+            "seller": 2
+            }
+        
+        response = self.client.put(reverse('sellgood:sale_update_delete',                                                   kwargs={'id_sale': 1}),  
+                                     data=json.dumps(new_sale), content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['id_sale_updated'][0]['id'], 1)
+        
+
+    def test_delete_sale(self):
+        response = self.client.delete(reverse('sellgood:sale_update_delete',                                          kwargs={'id_sale': 1}))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['id_sale_deleted'], 1)
+    
+    def test_sale_to_delete_not_found(self):
+        response = self.client.delete(reverse('sellgood:sale_update_delete',                                           kwargs={'id_sale': 8}))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()['error'], 'sale_id not found')
+
+    def test_method_not_allowed(self):
+        get_response = self.client.get(reverse('sellgood:sale_update_delete',                                          kwargs={'id_sale': 1}))
+        post_response = self.client.post(reverse('sellgood:sale_update_delete',                                          kwargs={'id_sale': 1}))
+
+        self.assertListEqual([get_response.status_code,                                             post_response.status_code],
+                            [405, 405])
+        self.assertListEqual([get_response.json()['error'], 
+                            post_response.json()['error']], 
+                            ['Method not allowed', 'Method not allowed'])
