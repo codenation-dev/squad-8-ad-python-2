@@ -125,3 +125,45 @@ class UpdateDeleteSales(TestCase):
         self.assertListEqual([get_response.json()['error'], 
                             post_response.json()['error']], 
                             ['Method not allowed', 'Method not allowed'])
+
+
+class SaleListSeller(TestCase):
+    def setUp(self):
+        self.client= Client()
+        self.sale1, self.sale2, self.sale3 = create_sales()
+
+    def test_seller_not_found(self):
+        response = self.client.get(reverse('sellgood:sale_seller_read', 
+                                    kwargs= {'id_seller': 8}))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()['error'], 'seller_id not found')
+
+    def test_number_seles_seller(self):
+        response_s1 = self.client.get(reverse('sellgood:sale_seller_read',
+                                            kwargs= {'id_seller': 1}))
+        response_s2 = self.client.get(reverse('sellgood:sale_seller_read',
+                                            kwargs= {'id_seller': 2}))
+
+        self.assertListEqual([response_s1.status_code, response_s2.status_code],
+                        [200, 200])
+        self.assertListEqual([len(response_s1.json()['seller_sales']), 
+                              len(response_s2.json()['seller_sales'])],
+                              [2, 1])
+
+    def test_method_not_allowed(self):
+        post_response = self.client.post(reverse('sellgood:sale_seller_read',
+                                            kwargs= {'id_seller': 1}))
+        put_response = self.client.put(reverse('sellgood:sale_seller_read',
+                                            kwargs= {'id_seller': 1}))
+        delete_response = self.client.delete(
+                                        reverse('sellgood:sale_seller_read',
+                                        kwargs= {'id_seller': 1}))
+
+        self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
+                             delete_response.status_code],
+                             [405, 405, 405])
+        self.assertListEqual([post_response.json()['error'], 
+                            put_response.json()['error'], 
+                            delete_response.json()['error']],
+                            ['Method not allowed', 'Method not allowed', 'Method not allowed'])
