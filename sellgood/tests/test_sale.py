@@ -246,3 +246,40 @@ class SalesRankYear(TestCase):
                             put_response.json()['error'], 
                             delete_response.json()['error']],
                             ['Method not allowed', 'Method not allowed', 'Method not allowed'])
+
+
+class SalesRankYearMonth(TestCase):
+    def setUp(self):
+        self.client= Client()
+        self.sale1, self.sale2, self.sale3 = create_sales()
+
+    def test_empty_year_month(self):
+        response = self.client.get(reverse('sellgood:sale_rank_year_month',
+                                            kwargs={'year': 2002, 'month': 1}))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()['error'], 'Empty year or empty month')
+    
+    def test_number_sales_year_month(self):
+        response = self.client.get(reverse('sellgood:sale_rank_year_month',
+                                            kwargs={'year': 2020, 'month': 1}))
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()['sale_year_month']), 2)
+
+    def test_method_not_allowed(self):
+        post_response = self.client.post(reverse                                                                ('sellgood:sale_rank_year_month',
+                                        kwargs={'year': 2020, 'month': 1}))
+        put_response = self.client.put(reverse('sellgood:sale_rank_year_month',
+                                            kwargs={'year': 2020, 'month': 1}))
+        delete_response = self.client.delete(
+                                        reverse('sellgood:sale_rank_year_month',
+                                        kwargs={'year': 2020, 'month': 1}))
+
+        self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
+                             delete_response.status_code],
+                             [405, 405, 405])
+        self.assertListEqual([post_response.json()['error'], 
+                            put_response.json()['error'], 
+                            delete_response.json()['error']],
+                            ['Method not allowed', 'Method not allowed', 'Method not allowed'])
