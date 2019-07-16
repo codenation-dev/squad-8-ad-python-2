@@ -41,3 +41,45 @@ def create_sales():
                                 seller=seller1)
     
     return sale1, sale2, sale3
+
+
+class CreateReadSale(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.seller1, self.seller2 = create_sellers()
+
+    def test_create_sale(self):
+        data = {
+            "date": "2020-12-31",
+            "amount": 9191.19,
+            "seller": 1,
+            }
+        response = self.client.post(reverse('sellgood:sale_create_read'),                                  data=json.dumps(data),                                                  content_type='application/json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['New Sale Info'][0]['id'], 1)
+        self.assertEqual(response.json()['New Sale Info'][0]['seller'], 1)
+        self.assertEqual(float(response.json()['New Sale Info'][0]['amount']), 9191.19)
+
+    def test_empty_sales(self):
+        response = self.client.get(reverse('sellgood:sale_create_read'))
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()['error'], 'no sales recorded')
+
+    def test_method_not_allowed(self):
+        put_response = self.client.put(reverse('sellgood:sale_create_read'))
+        delete_response = self.client.delete(reverse                                                                ('sellgood:sale_create_read')) 
+
+        self.assertEqual(put_response.status_code, 405)
+        self.assertEqual(delete_response.status_code, 405)
+        self.assertListEqual([put_response.json()['error'], 
+                            delete_response.json()['error']], ['Method not allowed', 'Method not allowed'])
+    
+    def test_number_sales_recorded(self):
+        sale1, sale2, sale3 = create_sales()
+
+        response = self.client.get(reverse('sellgood:sale_create_read'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()["sales"]), 3)
