@@ -17,5 +17,5 @@ class SellerSerializer(serializers.ModelSerializer):
 class CommissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sale
-        fields = ['date', 'commission', 'seller']
+        fields = ['seller', 'commission']
 
