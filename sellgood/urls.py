@@ -29,14 +29,16 @@ urlpatterns = [
             sale.list_sales_year_month,                       
             name='sale_rank_year_month'),  
     # commissions urls
-    path('commission/rank/', commission.RankList.as_view()),
+    path('commission/rank/', 
+         commission.RankList.as_view(), 
+         name='commission_rank'),
     re_path(r'commission/rank/(?P<year>\d{4})$', 
             commission.RankYearList.as_view(), 
             name='commission_rank_year'),
     re_path(r'commission/rank/(?P<month>\d{1,2})$', 
-            commission.RankMonthList, 
+            commission.RankMonthList.as_view(), 
             name='commission_rank_month'), 
     path('commission/rank/<int:year>/<int:month>', 
-         commission.RankYearMonthList, 
+         commission.RankYearMonthList.as_view(), 
          name='commission_rank_year_month')
 ]
