@@ -1,14 +1,23 @@
 import json
 from decimal import Decimal
 from django.test import Client, TestCase
+from django.contrib.auth.models import User
 from django.urls import reverse
 from sellgood.models import Plan, Seller, Sale
+
+from model_mommy import mommy
+from rest_framework import status
 
 
 class CreateReadSale(TestCase):
     def setUp(self):
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
         self.client = Client()
-        self.seller1, self.seller2 = create_sellers()
+        logged_in = self.client.login(username='testuser', password='12345')
+
+        self.seller1, self.seller2 = mommy.make('sellgood.Seller', _quantity=2)
 
     def test_create_sale(self):
         data = {
@@ -16,123 +25,73 @@ class CreateReadSale(TestCase):
             "amount": 9191.19,
             "seller": 1,
             }
-        response = self.client.post(reverse('sellgood:sale_create_read'),                                   data=json.dumps(data),                                                  content_type='application/json')
+        response = self.client.post(reverse('sellgood:sale-list'),                                  data=json.dumps(data),                                                  content_type='application/json')
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['New Sale Info'][0]['id'], 1)
-        self.assertEqual(response.json()['New Sale Info'][0]['seller'], 1)
-        self.assertEqual(float(response.json()['New Sale Info'][0]['amount']), 9191.19)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['id'], 1)
+        self.assertEqual(response.json()['seller'], 1)
+        self.assertEqual(float(response.json()['amount']), 9191.19)
 
     def test_empty_sales(self):
-        response = self.client.get(reverse('sellgood:sale_create_read'))
+        response = self.client.get(reverse('sellgood:sale-list'))
 
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()['error'], 'no sales recorded')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 0)
 
     def test_method_not_allowed(self):
-        put_response = self.client.put(reverse('sellgood:sale_create_read'))
-        delete_response = self.client.delete(reverse(
-            'sellgood:sale_create_read')) 
+        put_response = self.client.put(reverse('sellgood:sale-list'))
+        delete_response = self.client.delete(reverse                                                                ('sellgood:sale-list')) 
 
-        self.assertEqual(put_response.status_code, 405)
-        self.assertEqual(delete_response.status_code, 405)
-        self.assertListEqual([put_response.json()['error'], 
-                              delete_response.json()['error']], 
-                             ['Method not allowed', 'Method not allowed'])
-    
+        self.assertEqual(put_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(delete_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def test_number_sales_recorded(self):
-        sale1, sale2, sale3 = create_sales()
+        sale1, sale2, sale3 = mommy.make('sellgood.Sale', _quantity=3, seller=mommy.make('sellgood.Seller'))
 
-        response = self.client.get(reverse('sellgood:sale_create_read'))
+        response = self.client.get(reverse('sellgood:sale-list'))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()["sales"]), 3)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 3)
 
-
-class UpdateDeleteSales(TestCase):
-    def setUp(self):
-        self.client= Client()
-        self.sale1, self.sale2, self.sale3 = create_sales()
-
+    def test_detail_sale(self):
+        sale1 = mommy.make('sellgood.Sale', amount=1111.56, date='2020-01-31', seller=mommy.make('sellgood.Seller'))
+        response = self.client.get(reverse('sellgood:sale-detail', 
+                                            kwargs={'pk': 1}))
+        
+        self.assertEqual(response.json()['id'], 1)
+        self.assertEqual(response.json()['date'], '2020-01-31')
+        self.assertEqual(float(response.json()['amount']), 1111.56)
+    
     def test_update_sale(self):
+        sale1, sale2 = mommy.make('sellgood.Sale', _quantity=2, seller=mommy.make('sellgood.Seller'))
         new_sale = {
             'date': "2040-01-31",
             "amount": 25000.00,
             "seller": 2
             }
         
-        response = self.client.put(reverse(
-            'sellgood:sale_update_delete',                                      kwargs={'id_sale': 1}),
-            data=json.dumps(new_sale),
-            content_type='application/json')
+        response = self.client.put(reverse('sellgood:sale-detail',                                                   kwargs={'pk': 1}),  
+                                     data=json.dumps(new_sale), content_type='application/json')
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['id_sale_updated'][0]['id'], 1)
-        
-
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['id'], 1)
+        self.assertEqual(response.json()['seller'], 2)
+    
     def test_delete_sale(self):
-        response = self.client.delete(reverse('sellgood:sale_update_delete',                                          kwargs={'id_sale': 1}))
+        sale1 = mommy.make('sellgood.Sale', seller=mommy.make('sellgood.Seller'))
+        response = self.client.delete(reverse('sellgood:sale-detail',                                          kwargs={'pk': 1}))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['id_sale_deleted'], 1)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
     
     def test_sale_to_delete_not_found(self):
-        response = self.client.delete(reverse('sellgood:sale_update_delete',                                           kwargs={'id_sale': 8}))
+        response = self.client.delete(reverse('sellgood:sale-detail',                                           kwargs={'pk': 8}))
 
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()['error'], 'sale_id not found')
-
-    def test_method_not_allowed(self):
-        get_response = self.client.get(reverse('sellgood:sale_update_delete',                                          kwargs={'id_sale': 1}))
-        post_response = self.client.post(reverse('sellgood:sale_update_delete',                                          kwargs={'id_sale': 1}))
-
-        self.assertListEqual([get_response.status_code,                                              post_response.status_code],
-                             [405, 405])
-        self.assertListEqual([get_response.json()['error'], 
-                             post_response.json()['error']], 
-                             ['Method not allowed', 'Method not allowed'])
-
-
-class SaleListSeller(TestCase):
-    def setUp(self):
-        self.client= Client()
-        self.sale1, self.sale2, self.sale3 = create_sales()
-
-    def test_seller_not_found(self):
-        response = self.client.get(reverse('sellgood:sale_seller_read', 
-                                           kwargs= {'id_seller': 8}))
-
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()['error'], 'seller_id not found')
-
-    def test_number_seles_seller(self):
-        response_s1 = self.client.get(reverse('sellgood:sale_seller_read',
-                                              kwargs= {'id_seller': 1}))
-        response_s2 = self.client.get(reverse('sellgood:sale_seller_read',
-                                              kwargs= {'id_seller': 2}))
-
-        self.assertListEqual([response_s1.status_code, response_s2.status_code],
-                             [200, 200])
-        self.assertListEqual([len(response_s1.json()['seller_sales']), 
-                              len(response_s2.json()['seller_sales'])],
-                              [2, 1])
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_method_not_allowed(self):
-        post_response = self.client.post(reverse('sellgood:sale_seller_read',
-                                                 kwargs= {'id_seller': 1}))
-        put_response = self.client.put(reverse('sellgood:sale_seller_read',
-                                                 kwargs= {'id_seller': 1}))
-        delete_response = self.client.delete(reverse(
-            'sellgood:sale_seller_read',
-            kwargs= {'id_seller': 1}))
+        get_response = self.client.post(reverse('sellgood:sale-detail',                                          kwargs={'pk': 1}))
 
-        self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
-                             delete_response.status_code],
-                             [405, 405, 405])
-        self.assertListEqual([post_response.json()['error'], 
-                             put_response.json()['error'], 
-                             delete_response.json()['error']],
-                             ['Method not allowed', 'Method not allowed', 'Method not allowed'])
+        self.assertEqual(get_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class SalesRankMonth(TestCase):

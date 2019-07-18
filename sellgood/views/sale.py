@@ -1,5 +1,5 @@
 from sellgood.models import Sale
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, permissions
 from sellgood.serializers import SaleSerializer
 
 
