@@ -1,7 +1,6 @@
 import json
 
-from django.http import JsonResponse
-from rest_framework import routers, generics, permissions
+from rest_framework import generics
 
 from sellgood.models import Sale
 from sellgood.serializers import CommissionSerializer
