@@ -9,7 +9,7 @@ from model_mommy import mommy
 from rest_framework import status
 
 
-class CreateReadSale(TestCase):
+class CreateReadUpdateDeleteSale(TestCase):
     def setUp(self):
         user = User.objects.create(username='testuser')
         user.set_password('12345')
@@ -96,117 +96,114 @@ class CreateReadSale(TestCase):
 
 class SalesRankMonth(TestCase):
     def setUp(self):
-        self.client= Client()
-        self.sale1, self.sale2, self.sale3 = create_sales()
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+        self.client = Client()
+        logged_in = self.client.login(username='testuser', password='12345')
+                
+        sale1, sale2 = mommy.make('sellgood.Sale', date='2018-01-28', _quantity=2, seller=mommy.make('sellgood.Seller'))
 
     def test_empty_month(self):
         response = self.client.get(reverse('sellgood:sale_rank_month', 
                                             kwargs={'month': 5}))
 
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()['error'], 'Empty month')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 0)
 
     def test_number_of_sales_month(self):
-        response_jan = self.client.get(reverse('sellgood:sale_rank_month', 
-                                                kwargs={'month': 1}))
-        response_feb = self.client.get(reverse('sellgood:sale_rank_month', 
-                                                kwargs={'month': 2}))
-
-        self.assertListEqual([response_jan.status_code,                                              response_feb.status_code],
-                             [200, 200])
-        self.assertListEqual([len(response_jan.json()['sales_month']),                               len(response_feb.json()['sales_month'])],
-                             [2, 1])
+        response = self.client.get(reverse('sellgood:sale_rank_month', 
+                                            kwargs={'month': 1}))
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 2)
 
     def test_method_not_allowed(self):
         post_response = self.client.post(reverse('sellgood:sale_rank_month',
-                                                 kwargs= {'month': 1}))
+                                            kwargs= {'month': 1}))
         put_response = self.client.put(reverse('sellgood:sale_rank_month',
-                                                kwargs= {'month': 1}))
-        delete_response = self.client.delete(reverse(
-            'sellgood:sale_rank_month',
-            kwargs= {'month': 1}))
+                                            kwargs= {'month': 1}))
+        delete_response = self.client.delete(
+                                        reverse('sellgood:sale_rank_month',
+                                        kwargs= {'month': 1}))
 
         self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
                              delete_response.status_code],
-                             [405, 405, 405])
-        self.assertListEqual([post_response.json()['error'], 
-                             put_response.json()['error'], 
-                             delete_response.json()['error']],
-                             ['Method not allowed', 'Method not allowed', 'Method not allowed'])
+                             [status.HTTP_405_METHOD_NOT_ALLOWED, status.HTTP_405_METHOD_NOT_ALLOWED, status.HTTP_405_METHOD_NOT_ALLOWED])
 
 
 class SalesRankYear(TestCase):
     def setUp(self):
-        self.client= Client()
-        self.sale1, self.sale2, self.sale3 = create_sales()
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+        self.client = Client()
+        logged_in = self.client.login(username='testuser', password='12345')
+
+        sale1, sale2 = mommy.make('sellgood.Sale', date='2020-01-28', _quantity=2, seller=mommy.make('sellgood.Seller'))
 
     
     def test_empty_year(self):
         response = self.client.get(reverse('sellgood:sale_rank_year',
                                             kwargs={'year': 2002}))
 
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()['error'], 'Empty year')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 0)
 
     def test_number_sales_year(self):
         response = self.client.get(reverse('sellgood:sale_rank_year',
                                             kwargs={'year': 2020}))
 
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()['sales_year']), 3)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 2)
 
     def test_method_not_allowed(self):
         post_response = self.client.post(reverse('sellgood:sale_rank_year',
-                                                 kwargs= {'year': 2020}))
+                                            kwargs= {'year': 2020}))
         put_response = self.client.put(reverse('sellgood:sale_rank_year',
-                                                kwargs= {'year': 2020}))
-        delete_response = self.client.delete(reverse(
-            'sellgood:sale_rank_year',
-            kwargs= {'year': 2020}))
+                                            kwargs= {'year': 2020}))
+        delete_response = self.client.delete(
+                                        reverse('sellgood:sale_rank_year',
+                                        kwargs= {'year': 2020}))
 
         self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
                              delete_response.status_code],
-                             [405, 405, 405])
-        self.assertListEqual([post_response.json()['error'], 
-                             put_response.json()['error'], 
-                             delete_response.json()['error']],
-                             ['Method not allowed', 'Method not allowed', 'Method not allowed'])
+                             [status.HTTP_405_METHOD_NOT_ALLOWED, status.HTTP_405_METHOD_NOT_ALLOWED, status.HTTP_405_METHOD_NOT_ALLOWED])
 
 
 class SalesRankYearMonth(TestCase):
     def setUp(self):
-        self.client= Client()
-        self.sale1, self.sale2, self.sale3 = create_sales()
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+        self.client = Client()
+        logged_in = self.client.login(username='testuser', password='12345')
+
+        sale1, sale2 = mommy.make('sellgood.Sale', date='2020-01-28', _quantity=2, seller=mommy.make('sellgood.Seller'))
 
     def test_empty_year_month(self):
         response = self.client.get(reverse('sellgood:sale_rank_year_month',
                                             kwargs={'year': 2002, 'month': 1}))
 
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(response.json()['error'], 'Empty year or empty month')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 0)
     
     def test_number_sales_year_month(self):
         response = self.client.get(reverse('sellgood:sale_rank_year_month',
                                             kwargs={'year': 2020, 'month': 1}))
         
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()['sale_year_month']), 2)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 2)
 
     def test_method_not_allowed(self):
-        post_response = self.client.post(reverse(
-            'sellgood:sale_rank_year_month',
-            kwargs={'year': 2020, 'month': 1}))
-        put_response = self.client.put(reverse(
-            'sellgood:sale_rank_year_month',
-            kwargs={'year': 2020, 'month': 1}))
-        delete_response = self.client.delete(reverse(
-            'sellgood:sale_rank_year_month',
-            kwargs={'year': 2020, 'month': 1}))
+        post_response = self.client.post(reverse                                                                ('sellgood:sale_rank_year_month',
+                                        kwargs={'year': 2020, 'month': 1}))
+        put_response = self.client.put(reverse('sellgood:sale_rank_year_month',
+                                            kwargs={'year': 2020, 'month': 1}))
+        delete_response = self.client.delete(
+                                        reverse('sellgood:sale_rank_year_month',
+                                        kwargs={'year': 2020, 'month': 1}))
 
         self.assertListEqual([post_response.status_code,                                             put_response.status_code, 
                              delete_response.status_code],
-                             [405, 405, 405])
-        self.assertListEqual([post_response.json()['error'], 
-                             put_response.json()['error'], 
-                             delete_response.json()['error']],
-                             ['Method not allowed', 'Method not allowed', 'Method not allowed'])
+                             [status.HTTP_405_METHOD_NOT_ALLOWED, status.HTTP_405_METHOD_NOT_ALLOWED, status.HTTP_405_METHOD_NOT_ALLOWED])
