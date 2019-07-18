@@ -1,17 +1,15 @@
-import json
-
 from rest_framework import generics
 
 from sellgood.models import Sale
 from sellgood.serializers import CommissionSerializer
 
 
-class RankList(generics.ListAPIView):          
+class CommissionList(generics.ListAPIView):          
     queryset = Sale.objects.all().order_by('-commission')
     serializer_class = CommissionSerializer 
     
 
-class RankYearList(generics.ListAPIView):           
+class CommissionYearList(generics.ListAPIView):           
     serializer_class = CommissionSerializer 
     
     def get_queryset(self):
@@ -20,7 +18,7 @@ class RankYearList(generics.ListAPIView):
                     .order_by('-commission'))
 
 
-class RankMonthList(generics.ListAPIView):           
+class CommissionMonthList(generics.ListAPIView):           
     serializer_class = CommissionSerializer 
     
     def get_queryset(self):
@@ -29,7 +27,7 @@ class RankMonthList(generics.ListAPIView):
                     .order_by('-commission'))
 
 
-class RankYearMonthList(generics.ListAPIView):           
+class CommissionYearMonthList(generics.ListAPIView):           
     serializer_class = CommissionSerializer 
     
     def get_queryset(self):
