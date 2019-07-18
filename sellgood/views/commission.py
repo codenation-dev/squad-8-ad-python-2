@@ -1,50 +1,40 @@
 import json
 
 from django.http import JsonResponse
+from rest_framework import routers, generics, permissions
 
 from sellgood.models import Sale
+from sellgood.serializers import CommissionSerializer
 
 
-def rank(request):
-    rank = (Sale.objects
-                .all()                
-                .order_by('-commission')
-                .values('date', 'commission', 'seller__name'))
-    if not rank:
-        return JsonResponse({'error': 'rank not found'}, status=404)
-    return JsonResponse({'commission_rank': list(rank)})
-
-
-def rank_year(request, year):
-    rank = (Sale.objects
-                .filter(date__year=year)
-                .order_by('-commission')
-                .values('date', 'commission', 'seller__name'))
-    if not rank:
-        return JsonResponse({'error': f'rank of year {year} not found'},
-                            status=404)
-    return JsonResponse({'commission_rank_year': list(rank)})
-
-
-def rank_month(request, month):
-    rank = (Sale.objects
-                .filter(date__month=month)
-                .order_by('-commission')
-                .values('date', 'commission', 'seller__name'))
-    if not rank:
-        return JsonResponse({'error': f'rank of month {month} not found'},
-                            status=404)
-    return JsonResponse({'commission_rank_month': list(rank)})
-
-
-def rank_year_month(request, year, month):
-    rank = (Sale.objects
-                .filter(date__year=year, date__month=month)
-                .order_by('-commission')
-                .values('date', 'commission', 'seller__name'))
-    if not rank:
-        return JsonResponse(
-            {'error': f'rank of year {year} and month {month} not found'}, 
-            status=404)
-    return JsonResponse({'commission_rank_year_month': list(rank)})
+class RankList(generics.ListAPIView):          
+    queryset = Sale.objects.all().order_by('-commission')
+    serializer_class = CommissionSerializer 
     
+
+class RankYearList(generics.ListAPIView):           
+    serializer_class = CommissionSerializer 
+    
+    def get_queryset(self):
+        return (Sale.objects
+                    .filter(date__year=self.kwargs['year'])
+                    .order_by('-commission'))
+
+
+class RankMonthList(generics.ListAPIView):           
+    serializer_class = CommissionSerializer 
+    
+    def get_queryset(self):
+        return (Sale.objects
+                    .filter(date__month=self.kwargs['month'])
+                    .order_by('-commission'))
+
+
+class RankYearMonthList(generics.ListAPIView):           
+    serializer_class = CommissionSerializer 
+    
+    def get_queryset(self):
+        return (Sale.objects
+                    .filter(date__year=self.kwargs['year'],
+                            date__month=self.kwargs['month'])
+                    .order_by('-commission'))
