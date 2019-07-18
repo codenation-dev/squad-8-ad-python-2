@@ -1,10 +1,14 @@
+from django.conf.urls import url, include
 from django.urls import path, re_path
-from sellgood.views import commission
-from sellgood.views import sale
+from rest_framework.urlpatterns import format_suffix_patterns
+
+from sellgood.views import commission, sale
 
 
 app_name='sellgood'
-urlpatterns = [
+
+
+urlpatterns = [    
     # sales urls
     path('sale', sale.create_read_sale, name='sale_create_read'),
     path('sale/<int:id_sale>', sale.update_delete_sale,
@@ -19,14 +23,16 @@ urlpatterns = [
             sale.list_sales_year_month,                       
             name='sale_rank_year_month'),  
     # commissions urls
-    path('commission/rank/', commission.rank, name='commission_rank'),
+    path('commission/rank/', commission.RankList.as_view()),
     re_path(r'commission/rank/(?P<year>\d{4})$', 
-            commission.rank_year, 
+            commission.RankYearList.as_view(), 
             name='commission_rank_year'),
     re_path(r'commission/rank/(?P<month>\d{1,2})$', 
-            commission.rank_month, 
+            commission.RankMonthList, 
             name='commission_rank_month'), 
     path('commission/rank/<int:year>/<int:month>', 
-         commission.rank_year_month, 
+         commission.RankYearMonthList, 
          name='commission_rank_year_month')
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
