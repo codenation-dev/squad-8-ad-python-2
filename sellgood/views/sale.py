@@ -6,6 +6,7 @@ from sellgood.serializers import SaleSerializer
 class SaleViewSet(viewsets.ModelViewSet):
     queryset = Sale.objects.all()
     serializer_class = SaleSerializer  
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class ListSaleYearMonth(generics.ListAPIView):
