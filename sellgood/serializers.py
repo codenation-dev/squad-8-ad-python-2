@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from sellgood.models import Address, Sale, Seller
 
+
 class AddressSerializer(serializers.ModelSerializer):       
     class Meta:
         model = Address
@@ -18,4 +19,3 @@ class CommissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sale
         fields = ['seller', 'commission']
-
