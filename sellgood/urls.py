@@ -1,7 +1,6 @@
 from django.conf.urls import url, include
 from django.urls import path, re_path
 from rest_framework import routers
-from rest_framework.urlpatterns import format_suffix_patterns
 
 from sellgood.views import address, commission, sale, seller
 
@@ -41,5 +40,3 @@ urlpatterns = [
          commission.RankYearMonthList, 
          name='commission_rank_year_month')
 ]
-
-#urlpatterns = format_suffix_patterns(urlpatterns)
