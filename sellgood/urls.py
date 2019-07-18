@@ -16,15 +16,6 @@ router.register(r'sale', sale.SaleViewSet, base_name='sale')
 
 urlpatterns = [ 
     url(r'^', include(router.urls)),    
-    re_path(r'sale/rank/(?P<month>\d{1,2}$)', 
-            sale.ListSaleYearMonth.as_view(),      
-            name='sale_rank_month'),
-    re_path(r'sale/rank/(?P<year>\d{4}$)', 
-            sale.ListSaleYearMonth.as_view(),
-            name='sale_rank_year'),
-    re_path(r'sale/rank/(?P<year>\d{4})/(?P<month>\d{1,2}$)',   
-            sale.ListSaleYearMonth.as_view(),                       
-            name='sale_rank_year_month'),  
     # commissions urls
     path('commission/', 
          commission.CommissionList.as_view(), 
