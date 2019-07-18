@@ -11,6 +11,7 @@ app_name='sellgood'
 
 router = routers.DefaultRouter()
 router.register(r'address', address.AddressViewSet)
+router.register(r'seller', seller.SellerViewSet)
 
 
 urlpatterns = [ 
