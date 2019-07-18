@@ -1,10 +1,20 @@
+from django.conf.urls import url, include
 from django.urls import path, re_path
-from sellgood.views import commission
-from sellgood.views import sale
+from rest_framework import routers
+
+from sellgood.views import address, commission, sale, seller
 
 
 app_name='sellgood'
-urlpatterns = [
+
+
+router = routers.DefaultRouter()
+router.register(r'address', address.AddressViewSet)
+router.register(r'seller', seller.SellerViewSet)
+
+
+urlpatterns = [ 
+    url(r'^', include(router.urls)),    
     # sales urls
     path('sale', sale.create_read_sale, name='sale_create_read'),
     path('sale/<int:id_sale>', sale.update_delete_sale,
@@ -19,14 +29,16 @@ urlpatterns = [
             sale.list_sales_year_month,                       
             name='sale_rank_year_month'),  
     # commissions urls
-    path('commission/rank/', commission.rank, name='commission_rank'),
+    path('commission/rank/', 
+         commission.RankList.as_view(), 
+         name='commission_rank'),
     re_path(r'commission/rank/(?P<year>\d{4})$', 
-            commission.rank_year, 
+            commission.RankYearList.as_view(), 
             name='commission_rank_year'),
     re_path(r'commission/rank/(?P<month>\d{1,2})$', 
-            commission.rank_month, 
+            commission.RankMonthList.as_view(), 
             name='commission_rank_month'), 
     path('commission/rank/<int:year>/<int:month>', 
-         commission.rank_year_month, 
+         commission.RankYearMonthList.as_view(), 
          name='commission_rank_year_month')
 ]
