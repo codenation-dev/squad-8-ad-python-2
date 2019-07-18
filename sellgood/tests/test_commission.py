@@ -10,7 +10,7 @@ from model_mommy import mommy
 from sellgood.models import Sale
 
 
-class RankListTests(TestCase):
+class CommissionListTests(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -31,19 +31,19 @@ class RankListTests(TestCase):
 
     def test_no_records(self):
         Sale.objects.all().delete()
-        response = self.client.get(reverse('sellgood:commission_rank'))
+        response = self.client.get(reverse('sellgood:commission'))
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 0)
             
     def test_number_of_records(self):
-        response = self.client.get(reverse('sellgood:commission_rank'))
-
+        response = self.client.get(reverse('sellgood:commission'))
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 3)
 
     def test_commissions_order(self):        
-        response = self.client.get(reverse('sellgood:commission_rank'))        
+        response = self.client.get(reverse('sellgood:commission'))        
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         for idx, prev in enumerate(response.json()):  
             for next in response.json()[idx+1:]:
@@ -51,7 +51,7 @@ class RankListTests(TestCase):
                                         Decimal(next['commission']))
 
 
-class RankYearListTests(TestCase):
+class CommissionYearListTests(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -75,21 +75,21 @@ class RankYearListTests(TestCase):
                    seller=seller2)
 
     def test_no_records(self):        
-        response = self.client.get(reverse('sellgood:commission_rank_year', 
+        response = self.client.get(reverse('sellgood:commission_year', 
                                            kwargs={'year': 2017}))
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 0)
             
     def test_number_of_records(self):
-        response = self.client.get(reverse('sellgood:commission_rank_year', 
+        response = self.client.get(reverse('sellgood:commission_year', 
                                            kwargs={'year': 2019}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 2)
 
     def test_commissions_order(self):        
-        response = self.client.get(reverse('sellgood:commission_rank_year', 
+        response = self.client.get(reverse('sellgood:commission_year', 
                                            kwargs={'year': 2019}))     
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
@@ -99,7 +99,7 @@ class RankYearListTests(TestCase):
                                         Decimal(next['commission']))
 
 
-class RankMonthListTests(TestCase):
+class CommissionMonthListTests(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -123,21 +123,21 @@ class RankMonthListTests(TestCase):
                    seller=seller2) 
 
     def test_no_records(self):        
-        response = self.client.get(reverse('sellgood:commission_rank_month', 
+        response = self.client.get(reverse('sellgood:commission_month', 
                                            kwargs={'month': 4}))
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 0)
             
     def test_number_of_records(self):
-        response = self.client.get(reverse('sellgood:commission_rank_month', 
+        response = self.client.get(reverse('sellgood:commission_month', 
                                            kwargs={'month': 1}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 3)
 
     def test_commissions_order(self):        
-        response = self.client.get(reverse('sellgood:commission_rank_month', 
+        response = self.client.get(reverse('sellgood:commission_month', 
                                            kwargs={'month': 1}))     
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
@@ -147,7 +147,7 @@ class RankMonthListTests(TestCase):
                                         Decimal(next['commission']))
 
                             
-class RankYearMonthListTests(TestCase):
+class CommissionYearMonthListTests(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -171,25 +171,22 @@ class RankYearMonthListTests(TestCase):
                    seller=seller2) 
 
     def test_no_records(self):        
-        response = self.client.get(reverse(
-            'sellgood:commission_rank_year_month', 
-            kwargs={'year': 2019, 'month': 4}))
+        response = self.client.get(reverse('sellgood:commission_year_month', 
+                                           kwargs={'year': 2019, 'month': 4}))
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 0)
             
     def test_number_of_records(self):
-        response = self.client.get(reverse(
-            'sellgood:commission_rank_year_month', 
-            kwargs={'year': 2019, 'month': 1}))
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)              
+        response = self.client.get(reverse('sellgood:commission_year_month', 
+                                           kwargs={'year': 2019, 'month': 1}))
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 2)
 
     def test_commissions_order(self):        
-        response = self.client.get(reverse(
-            'sellgood:commission_rank_year_month', 
-            kwargs={'year': 2019, 'month': 1})) 
+        response = self.client.get(reverse('sellgood:commission_year_month', 
+                                           kwargs={'year': 2019, 'month': 1})) 
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)         
         for idx, prev in enumerate(response.json()):    
