@@ -1,80 +1,11 @@
-from django.shortcuts import HttpResponse
 from sellgood.models import Sale
-from sellgood.forms import SaleForm
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-import json
+from rest_framework import generics, viewsets
+from sellgood.serializers import SaleSerializer
 
 
-@csrf_exempt
-def create_read_sale(request):  # Create Sale
-    if request.method == 'POST':  # Check request method
-        sale_info = json.loads(request.body)
-        form = SaleForm(sale_info)
-        if form.is_valid():   # Body request validation 
-            date = form.cleaned_data['date']    
-            amount = form.cleaned_data['amount']
-            seller = form.cleaned_data['seller']  
-
-            # Create a new sale
-            new_sale = Sale.objects.create(     
-                    date=date, amount=amount, seller=seller)
-
-            # Body content when form is valid.
-            new_sale_info = Sale.objects.filter(pk=new_sale.id).values('id',                                                'seller', 'amount')
-
-            # Since body content is valid, return response_body
-            return JsonResponse({'New Sale Info': list(new_sale_info)},                             status=200)
-
-        # Since body not valid, return errors       
-        else:
-            return JsonResponse(form.errors, status=422)   
-
-    elif request.method == 'GET':  # If request method == GET Return Sale List
-        sales =  Sale.objects.all().values('id', 'date', 'amount',                                                  'seller__name', 'seller_id')
-        if not sales:
-            return JsonResponse({'error': "no sales recorded" }, status=404)
-
-        return JsonResponse({'sales': list(sales)}, status=200)
-
-    else:  # If method is not POST OR GET, return body_content
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
-
-
-@csrf_exempt
-def update_delete_sale(request, id_sale):
-    if request.method == 'PUT':   # Check request method
-        sale_info = json.loads(request.body)
-        form = SaleForm(sale_info)
-        if form.is_valid():      # Validate data
-            sale_to_update = Sale.objects.get(pk=id_sale)
-            sale_to_update.date = form.cleaned_data['date']
-            sale_to_update.amount = form.cleaned_data['amount']
-            sale_to_update.seller = form.cleaned_data['seller']
-            sale_to_update.save()
-
-            sale_info = Sale.objects.filter(pk=sale_to_update.id).values('id')
-             # Return updated_sale id 
-            return JsonResponse({'id_sale_updated': list(sale_info)},                               status=200)
-            
-        # Since body not valid, return errors    
-        else:
-            return JsonResponse(form.errors, status=422)
-
-    # If request method == DELETE; Delete Sale
-    elif request.method == 'DELETE': 
-        try:   # Check if the sale exists
-            sale_to_delete = Sale.objects.get(pk=id_sale)
-        except Sale.DoesNotExist:    # Returns an error if sale doesn't exist
-            return JsonResponse({'error':'sale_id not found'}, status=404)
-        else:       # If sale exists, delete.
-            sale_to_delete.delete()
-            return JsonResponse({'id_sale_deleted': id_sale}, status=200)
-
-    # If method is not PUT or DELETE, return body_content        
-    else:
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
-
+class SaleViewSet(viewsets.ModelViewSet):
+    queryset = Sale.objects.all()
+    serializer_class = SaleSerializer  
 
 @csrf_exempt
 def sale_list_seller(request, id_seller):
