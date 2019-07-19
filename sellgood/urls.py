@@ -9,24 +9,14 @@ app_name='sellgood'
 
 
 router = routers.DefaultRouter()
-router.register(r'address', address.AddressViewSet)
-router.register(r'seller', seller.SellerViewSet)
+router.register(r'address', address.AddressViewSet, base_name='address')
+router.register(r'seller', seller.SellerViewSet, base_name='seller')
 router.register(r'sale', sale.SaleViewSet, base_name='sale')
+router.register(r'commission', 
+                commission.CommissionViewSet, 
+                base_name='commission')
 
 
 urlpatterns = [ 
     url(r'^', include(router.urls)),    
-    # commissions urls
-    path('commission/', 
-         commission.CommissionList.as_view(), 
-         name='commission'),
-    re_path(r'commission/(?P<year>\d{4})$', 
-            commission.CommissionYearList.as_view(), 
-            name='commission_year'),
-    re_path(r'commission/(?P<month>\d{1,2})$', 
-            commission.CommissionMonthList.as_view(), 
-            name='commission_month'), 
-    path('commission/<int:year>/<int:month>', 
-         commission.CommissionYearMonthList.as_view(), 
-         name='commission_year_month')
 ]
