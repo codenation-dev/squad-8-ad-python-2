@@ -7,13 +7,7 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = '__all__'
-
-
-class SellerSerializer(serializers.ModelSerializer):       
-    class Meta:
-        model = Seller
-        fields = '__all__'
-
+        
 
 class CommissionSerializer(serializers.ModelSerializer):
     seller_id = serializers.IntegerField(source='seller.id')
