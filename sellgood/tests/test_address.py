@@ -38,3 +38,10 @@ class CreateReadUpdateDeleteAddress(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.json()['state'], 'New York')
         self.assertEqual(response.json()['seller'], 1)
+
+    def test_empty_address(self):
+        response = self.client.get(reverse('sellgood:address-list'))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 0)
+    
