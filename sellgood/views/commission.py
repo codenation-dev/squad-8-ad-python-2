@@ -1,37 +1,14 @@
 from rest_framework import generics
+from rest_framework.filters import OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 from sellgood.models import Sale
+from sellgood.views import sale
 from sellgood.serializers import CommissionSerializer
 
 
-class CommissionList(generics.ListAPIView):          
-    queryset = Sale.objects.all().order_by('-commission')
-    serializer_class = CommissionSerializer 
-    
-
-class CommissionYearList(generics.ListAPIView):           
-    serializer_class = CommissionSerializer 
-    
-    def get_queryset(self):
-        return (Sale.objects
-                    .filter(date__year=self.kwargs['year'])
-                    .order_by('-commission'))
-
-
-class CommissionMonthList(generics.ListAPIView):           
-    serializer_class = CommissionSerializer 
-    
-    def get_queryset(self):
-        return (Sale.objects
-                    .filter(date__month=self.kwargs['month'])
-                    .order_by('-commission'))
-
-
-class CommissionYearMonthList(generics.ListAPIView):           
-    serializer_class = CommissionSerializer 
-    
-    def get_queryset(self):
-        return (Sale.objects
-                    .filter(date__year=self.kwargs['year'],
-                            date__month=self.kwargs['month'])
-                    .order_by('-commission'))
+class CommissionViewSet(sale.SaleViewSet):
+    http_method_names = ['get'] 
+    serializer_class = CommissionSerializer       
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering = ['-commission']

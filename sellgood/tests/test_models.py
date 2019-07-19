@@ -16,13 +16,11 @@ class SaleModelTests(TestCase):
                                  plan=plan)          
         
     def test_save_commission_lower(self):
-        sale1 = mommy.make('Sale',
-                           date='2019-06-30', 
+        sale1 = mommy.make('Sale',                            
                            amount=50000.00, 
                            seller=self.seller)        
 
-        sale2 = mommy.make('Sale',
-                           date='2019-07-31', 
+        sale2 = mommy.make('Sale',                           
                            amount=1500.77, 
                            seller=self.seller)
 
@@ -32,13 +30,11 @@ class SaleModelTests(TestCase):
                          round(Decimal(30.02), 2))
 
     def test_save_commission_higher(self):
-        sale1 = mommy.make('Sale', 
-                           date='2019-06-30', 
+        sale1 = mommy.make('Sale',                             
                            amount=50000.01, 
                            seller=self.seller)
 
-        sale2 = mommy.make('Sale',
-                           date='2019-07-31', 
+        sale2 = mommy.make('Sale',                           
                            amount=75700.50, 
                            seller=self.seller)
 
