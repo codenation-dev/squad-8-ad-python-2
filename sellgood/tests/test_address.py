@@ -59,7 +59,18 @@ class CreateReadUpdateDeleteAddress(TestCase):
                               seller=mommy.make('sellgood.Seller'))
         address2 = mommy.make('sellgood.Address', 
                               seller=mommy.make('sellgood.Seller'))
-    
         response = self.client.get(reverse('sellgood:address-list'))
+        
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 2)
+
+    def test_detail_address(self):
+        address1 = mommy.make('sellgood.Address', city='Arkham',
+                            street='Main Street',
+                            seller=mommy.make('sellgood.Seller'))
+        response = self.client.get(reverse('sellgood:address-detail',
+                                               kwargs={'pk': 3}))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['city'], 'Arkham')
+        self.assertEqual(response.json()['street'], 'Main Street')
