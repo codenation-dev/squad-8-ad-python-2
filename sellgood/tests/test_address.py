@@ -17,9 +17,10 @@ class CreateReadUpdateDeleteAddress(TestCase):
         user.save()
         self.client = Client()
         logged_in = self.client.login(username='testuser', password='123456')
-        self.seller1, self.seller2 = mommy.make('sellgood.Seller', _quantity=2)
+        
 
     def test_create_address(self):
+        seller1 = mommy.make('sellgood.Seller')
         data = {
             'street': 'Main Street',
             'neighborhood': 'Northern Brooklyn',
@@ -69,7 +70,7 @@ class CreateReadUpdateDeleteAddress(TestCase):
             'sellgood.Address', city='Arkham', street='Main Street',
              seller=mommy.make('sellgood.Seller'))
         response = self.client.get(reverse('sellgood:address-detail',
-                                               kwargs={'pk': 3}))
+                                               kwargs={'pk': 1}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()['city'], 'Arkham')
@@ -79,6 +80,7 @@ class CreateReadUpdateDeleteAddress(TestCase):
         address1 = mommy.make(
             'sellgood.Address', city='New York', state='New York',
             seller=mommy.make('sellgood.Seller'))
+        seller2 = mommy.make('sellgood.Seller')
 
         data = {
             'street': 'Main Street',
@@ -92,7 +94,7 @@ class CreateReadUpdateDeleteAddress(TestCase):
             }
         
         response = self.client.put(reverse(
-            'sellgood:address-detail', kwargs={'pk': 3}),
+            'sellgood:address-detail', kwargs={'pk': 1}),
             data=json.dumps(data), content_type='application/json')
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -103,3 +105,14 @@ class CreateReadUpdateDeleteAddress(TestCase):
 
         response2 = self.client.get(reverse('sellgood:address-detail',
                                                kwargs={'pk': 2}))
+
+    def test_delete_address(self):
+        address1 = mommy.make('sellgood.Address',
+                              seller=mommy.make('sellgood.Seller'))
+
+        response = self.client.delete(reverse(
+            'sellgood:address-detail', kwargs={'pk': 1}))
+        
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+
