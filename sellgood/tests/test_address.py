@@ -124,4 +124,10 @@ class CreateReadUpdateDeleteAddress(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_method_not_allowed_detail(self):
-        pass
+        address1 = mommy.make('sellgood.Address',
+                              seller=mommy.make('sellgood.Seller'))
+
+        response = self.client.post(reverse('sellgood:address-detail',
+                                             kwargs={'pk': 1}))
+        self.assertEqual(response.status_code,
+                         status.HTTP_405_METHOD_NOT_ALLOWED)
