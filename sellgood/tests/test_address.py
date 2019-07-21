@@ -31,9 +31,9 @@ class CreateReadUpdateDeleteAddress(TestCase):
             'seller': 1
             }
     
-        response = self.client.post(reverse('sellgood:address-list'),
-                                    data=json.dumps(data),
-                                    content_type='application/json')
+        response = self.client.post(reverse(
+            'sellgood:address-list'), data=json.dumps(data),
+            content_type='application/json')
         
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.json()['state'], 'New York')
@@ -60,17 +60,46 @@ class CreateReadUpdateDeleteAddress(TestCase):
         address2 = mommy.make('sellgood.Address', 
                               seller=mommy.make('sellgood.Seller'))
         response = self.client.get(reverse('sellgood:address-list'))
-        
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 2)
 
     def test_detail_address(self):
-        address1 = mommy.make('sellgood.Address', city='Arkham',
-                            street='Main Street',
-                            seller=mommy.make('sellgood.Seller'))
+        address1 = mommy.make(
+            'sellgood.Address', city='Arkham', street='Main Street',
+             seller=mommy.make('sellgood.Seller'))
         response = self.client.get(reverse('sellgood:address-detail',
                                                kwargs={'pk': 3}))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()['city'], 'Arkham')
         self.assertEqual(response.json()['street'], 'Main Street')
+
+    def test_update_address(self):
+        address1 = mommy.make(
+            'sellgood.Address', city='New York', state='New York',
+            seller=mommy.make('sellgood.Seller'))
+
+        data = {
+            'street': 'Main Street',
+            'neighborhood': 'Northern Brooklyn',
+            'city': 'Arkham',
+            'state': 'New Jersey',
+            'number': '666',
+            'complement': 'Apartment 25',
+            'zipcode': '10009',
+            'seller': 2
+            }
+        
+        response = self.client.put(reverse(
+            'sellgood:address-detail', kwargs={'pk': 3}),
+            data=json.dumps(data), content_type='application/json')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['city'], 'Arkham')
+        self.assertEqual(response.json()['state'], 'New Jersey')
+        self.assertEqual(response.json()['zipcode'], '10009')
+        self.assertEqual(response.json()['seller'], 2)
+
+        response2 = self.client.get(reverse('sellgood:address-detail',
+                                               kwargs={'pk': 2}))
