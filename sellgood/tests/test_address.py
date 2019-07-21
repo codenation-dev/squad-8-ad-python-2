@@ -46,7 +46,7 @@ class CreateReadUpdateDeleteAddress(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 0)
     
-    def test_method_not_allowed(self):
+    def test_method_not_allowed_list(self):
         put_response = self.client.put(reverse('sellgood:address-list'))
         delete_response = self.client.delete(reverse('sellgood:address-list'))
 
@@ -115,4 +115,13 @@ class CreateReadUpdateDeleteAddress(TestCase):
         
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    def test_address_to_delete_not_found(self):
+        address1 = mommy.make('sellgood.Address',
+                              seller=mommy.make('sellgood.Seller'))
+        
+        response = self.client.delete(reverse('sellgood:address-detail',
+                                               kwargs={'pk': 2}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_method_not_allowed_detail(self):
+        pass
