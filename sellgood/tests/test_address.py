@@ -45,3 +45,9 @@ class CreateReadUpdateDeleteAddress(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 0)
     
+    def test_method_not_allowed(self):
+        put_response = self.client.put(reverse('sellgood:sale-list'))
+        delete_response = self.client.delete(reverse('sellgood:sale-list'))
+
+        self.assertEqual(put_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(delete_response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
