@@ -3,11 +3,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from sellgood.models import Address, Seller, Sale
-from sellgood.serializers import (
-                                AddressSerializer, 
-                                SellerSerializer, 
-                                SaleSerializer
-                                )           
+from sellgood.serializers.serializers_address import AddressSerializer 
+from sellgood.serializers.serializers_sale import SaleSerializer 
+from sellgood.serializers.serializers_seller import SellerSerializer 
+                             
 
 
 class SellerViewSet(viewsets.ModelViewSet):

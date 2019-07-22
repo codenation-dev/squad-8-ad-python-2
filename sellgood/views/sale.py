@@ -1,7 +1,7 @@
 from sellgood.models import Sale
 from rest_framework import viewsets, permissions
 from django_filters.rest_framework import DjangoFilterBackend
-from sellgood.serializers import SaleSerializer
+from sellgood.serializers.serializers_sale import SaleSerializer
 
 
 class SaleViewSet(viewsets.ModelViewSet):
