@@ -1,6 +1,7 @@
 from django.urls import path, re_path
 from sellgood.views import commission
 from sellgood.views import sale
+from sellgood.views import plan
 
 
 app_name='sellgood'
@@ -28,5 +29,10 @@ urlpatterns = [
             name='commission_rank_month'), 
     path('commission/rank/<int:year>/<int:month>', 
          commission.rank_year_month, 
-         name='commission_rank_year_month')
+         name='commission_rank_year_month'),
+    # plan urls
+    path('plan', plan.create_plan, name='create_plan'),
+    path('plan/get/<int:id>', plan.read_plan, name='get_plan'),
+    path('plan/update/<int:id>', plan.update_plan, name='update_plan'),
+    path('plan/del/<int:id>', plan.delete_plan, name='delete_plan'),
 ]
