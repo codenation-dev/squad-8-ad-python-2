@@ -10,14 +10,9 @@ from model_mommy import mommy
 from sellgood.models import Address
 
 
-class CreateReadUpdateDeleteAddress(TestCase):
-    def setUp(self):
-        user = User.objects.create(username='testuser')
-        user.set_password('123456')
-        user.save()
-        self.client = Client()
-        logged_in = self.client.login(username='testuser', password='123456')
-        
+class AddressViewSetTest(TestCase):
+    def setUp(self):        
+        self.client = Client()       
 
     def test_create_address(self):
         seller1 = mommy.make('sellgood.Seller')

@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -11,7 +11,6 @@ from sellgood.serializers.seller import SellerSerializer
 class SellerViewSet(viewsets.ModelViewSet):
     queryset = Seller.objects.all()
     serializer_class = SellerSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     @action(detail=True)
     def address(self, request, pk=None):

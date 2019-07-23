@@ -9,4 +9,3 @@ class SaleViewSet(viewsets.ModelViewSet):
     serializer_class = SaleSerializer  
     filter_backends = [DjangoFilterBackend]
     filter_fields = {'date': ['year', 'month']}    
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]

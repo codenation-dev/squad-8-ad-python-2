@@ -96,9 +96,6 @@ STATIC_URL = '/static/'
 # Django rest framework
 
 REST_FRAMEWORK = {    
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend'
     ]

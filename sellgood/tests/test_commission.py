@@ -8,7 +8,7 @@ from model_mommy import mommy
 from sellgood.models import Sale
 
 
-class CommissionViewSet(TestCase):
+class CommissionViewSetTest(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -32,19 +32,22 @@ class CommissionViewSet(TestCase):
 
     def test_no_records(self):
         Sale.objects.all().delete()
-        response = self.client.get(reverse('sellgood:commission-list'))
+        response = self.client.get(reverse('sellgood:commission-list'), 
+                                   content_type='application/json')
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 0)
             
     def test_number_of_records(self):
-        response = self.client.get(reverse('sellgood:commission-list'))
+        response = self.client.get(reverse('sellgood:commission-list'), 
+                                           content_type='application/json')
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 4)
 
     def test_commissions_order(self):        
-        response = self.client.get(reverse('sellgood:commission-list'))        
+        response = self.client.get(reverse('sellgood:commission-list'), 
+                                            content_type='application/json')        
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         for idx, prev in enumerate(response.json()):  
             for next in response.json()[idx+1:]:
@@ -52,20 +55,23 @@ class CommissionViewSet(TestCase):
                                         Decimal(next['commission']))
 
     def test_ordering_year(self):
-        response = self.client.get('/sellgood/commission/?date__year=2019')
+        response = self.client.get('/sellgood/commission/?date__year=2019', 
+                                   content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 3)
 
     def test_ordering_month(self):
-        response = self.client.get('/sellgood/commission/?date__month=01')
+        response = self.client.get('/sellgood/commission/?date__month=01', 
+                                   content_type='application/json')
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 3)
 
     def test_ordering_year_month(self):
         response = self.client.get('/sellgood/commission/'
-                                   '?date__month=01&date__year=2019')
+                                   '?date__month=01&date__year=2019', 
+                                   content_type='application/json')
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)             
         self.assertEqual(len(response.json()), 2)
