@@ -4,7 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from sellgood.models import Sale
 from sellgood.views import sale
-from sellgood.serializers.serializers_sale import CommissionSerializer
+from sellgood.serializers.commission import CommissionSerializer
 
 
 class CommissionViewSet(sale.SaleViewSet):

@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions
 
 from sellgood.models import Address
-from sellgood.serializers.serializers_address import AddressSerializer
+from sellgood.serializers.address import AddressSerializer
 
 
 class AddressViewSet(viewsets.ModelViewSet):

@@ -1,0 +1,11 @@
+# python cache directory
+__pycache__/
+
+# python test cache directory
+.pytest_cache
+
+# virtual environment directory
+venv/
+
+# visual studio directory
+.vscode
