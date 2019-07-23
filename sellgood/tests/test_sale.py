@@ -9,14 +9,10 @@ from model_mommy import mommy
 from rest_framework import status
 
 
-class CreateReadUpdateDeleteSale(TestCase):
+class SaleViewSetTest(TestCase):
     def setUp(self):
-        user = User.objects.create(username='testuser')
-        user.set_password('12345')
-        user.save()
         self.client = Client()
-        logged_in = self.client.login(username='testuser', password='12345')
-
+        
         self.seller1, self.seller2 = mommy.make('sellgood.Seller', _quantity=2)
 
     def test_create_sale(self):

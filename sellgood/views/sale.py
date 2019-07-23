@@ -1,7 +1,7 @@
 from sellgood.models import Sale
 from rest_framework import viewsets, permissions
 from django_filters.rest_framework import DjangoFilterBackend
-from sellgood.serializers.serializers_sale import SaleSerializer
+from sellgood.serializers.sale import SaleSerializer
 
 
 class SaleViewSet(viewsets.ModelViewSet):
@@ -9,4 +9,3 @@ class SaleViewSet(viewsets.ModelViewSet):
     serializer_class = SaleSerializer  
     filter_backends = [DjangoFilterBackend]
     filter_fields = {'date': ['year', 'month']}    
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
