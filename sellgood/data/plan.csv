@@ -1,4 +1,0 @@
-id,name,minimum_value,lower_percentage,higher_percentage
-1,junior,15000.0,0.02,0.04
-2,middle,30000.0,0.02,0.07
-3,senior,50000.0,0.02,0.1

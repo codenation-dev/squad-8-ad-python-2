@@ -1,38 +1,26 @@
-from django.urls import path, re_path
-from sellgood.views import commission
-from sellgood.views import sale
-from sellgood.views import plan
+from django.urls import path
+from rest_framework import routers
+
+from sellgood.views import address, commission, plan, sale, seller
 
 
 app_name='sellgood'
-urlpatterns = [
-    # sales urls
-    path('sale', sale.create_read_sale, name='sale_create_read'),
-    path('sale/<int:id_sale>', sale.update_delete_sale,                             
-         name='sale_update_delete'),
-    path('sale/seller/<int:id_seller>', sale.sale_list_seller,
-         name='sale_seller_read'),
-    re_path(r'sale/rank/(?P<month>\d{2}$)', sale.list_sales_month,
-            name='sale_rank_month'),
-    re_path(r'sale/rank/(?P<year>\d{4}$)', sale.list_sales_year,
-            name='sale_rank_year'),
-    re_path(r'sale/rank/(?P<year>\d{4})/(?P<month>\d{2}$)',   
-            sale.list_sales_year_month,                       
-            name='sale_rank_year_month'),  
-    # commissions urls
-    path('commission/rank/', commission.rank, name='commission_rank'),
-    re_path(r'commission/rank/(?P<year>\d{4})$', 
-            commission.rank_year, 
-            name='commission_rank_year'),
-    re_path(r'commission/rank/(?P<month>\d{1,2})$', 
-            commission.rank_month, 
-            name='commission_rank_month'), 
-    path('commission/rank/<int:year>/<int:month>', 
-         commission.rank_year_month, 
-         name='commission_rank_year_month'),
+
+
+router = routers.DefaultRouter()
+router.register(r'address', address.AddressViewSet, base_name='address')
+router.register(r'seller', seller.SellerViewSet, base_name='seller')
+router.register(r'sale', sale.SaleViewSet, base_name='sale')
+router.register(r'commission', 
+                commission.CommissionViewSet, 
+                base_name='commission')
+
+
+urlpatterns = [ 
+    url(r'^', include(router.urls)),    
     # plan urls
     path('plan', plan.create_plan, name='create_plan'),
     path('plan/get/<int:id>', plan.read_plan, name='get_plan'),
     path('plan/update/<int:id>', plan.update_plan, name='update_plan'),
-    path('plan/del/<int:id>', plan.delete_plan, name='delete_plan'),
+    path('plan/del/<int:id>', plan.delete_plan, name='delete_plan')
 ]
