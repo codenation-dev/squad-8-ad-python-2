@@ -1,12 +1,20 @@
+import calendar
 from decimal import Decimal
+
 from django.db import models
+from django.core.validators import EmailValidator, MinValueValidator
 
 
 class Plan(models.Model):
     name = models.CharField(max_length=50)
-    minimum_amount = models.DecimalField(max_digits=7, decimal_places=2)
-    lower_percentage = models.DecimalField(max_digits=3, decimal_places=2)
-    higher_percentage = models.DecimalField(max_digits=3, decimal_places=2)
+    minimum_amount = models.DecimalField(
+        max_digits=7, decimal_places=2,                                        validators=[MinValueValidator(Decimal(0.0))])
+    lower_percentage = models.DecimalField(
+        max_digits=3, decimal_places=2, 
+        validators=[MinValueValidator(Decimal(0.0))])
+    higher_percentage = models.DecimalField(
+        max_digits=3, decimal_places=2, 
+        validators=[MinValueValidator(Decimal(0.0))])
 
     class Meta:
         ordering = ['name']
@@ -18,9 +26,9 @@ class Plan(models.Model):
 class Seller(models.Model):
     cpf = models.CharField(max_length=11)
     name = models.CharField(max_length=100)
-    age = models.IntegerField()
+    age = models.IntegerField(validators=[MinValueValidator(0)])
     phone = models.CharField(max_length=13)
-    email = models.CharField(max_length=100)
+    email = models.CharField(max_length=100, validators=[EmailValidator()])
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
 
     class Meta:
@@ -51,7 +59,9 @@ class Address(models.Model):
 
 class Sale(models.Model):
     date = models.DateField()
-    amount = models.DecimalField(max_digits=7, decimal_places=2)  
+    amount = models.DecimalField(max_digits=7, 
+                                 decimal_places=2, 
+                                 validators=[MinValueValidator(Decimal(0.0))])
     commission = models.DecimalField(max_digits=7, 
                                      decimal_places=2, 
                                      editable=False)   
@@ -59,6 +69,7 @@ class Sale(models.Model):
 
     class Meta:
         ordering = ['date']
+        unique_together = ['seller', 'date']
 
     def __str__(self):
         return f'{self.date}, {self.amount}, {self.seller.name}'
