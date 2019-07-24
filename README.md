@@ -61,7 +61,7 @@ Creates a seller.
  }
 ```
 
-#### GET /sellgood/seller/\
+**GET /sellgood/seller/**\
 Lists all sellers sorted by name.
 
 ```python
@@ -88,7 +88,7 @@ Lists all sellers sorted by name.
 ]
 ```
 
-#### GET /sellgood/seller/1/\
+**GET /sellgood/seller/1/**\
 Lists seller details.
 ```python
 # output
@@ -100,6 +100,22 @@ Lists seller details.
     "phone": "47997001177",
     "email": "bruce_wayne@wayneenterprises.com",
     "plan": 3
+}
+```
+
+**GET sellgood/seller/1/address/**\
+List seller address.
+```python
+# output
+{
+    "seller": 1,
+    "street": "6th Ave",
+    "neighborhood": "Downtown",
+    "city": "Gotham",
+    "state": "Unknown",
+    "number": "13",
+    "complement": "The biggest building",
+    "zipcode": "1300000"
 }
 ```
 
