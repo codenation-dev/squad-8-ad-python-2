@@ -35,9 +35,9 @@ Content-Type: application/json
 
 ### Seller endpoints
 
-**POST /sellgood/seller/**
-Creates a seller.
-**Input**
+**POST /sellgood/seller/**\
+Creates a seller.\
+**Input**\
 ```python
 {
     "cpf": "77711100077",
@@ -48,7 +48,7 @@ Creates a seller.
     "plan": 3
 }
 ```
-**Output**
+**Output**\
 ```python
 {
     "id": 1,
@@ -61,9 +61,9 @@ Creates a seller.
  }
 ```
 
-#### GET /sellgood/seller/
-Lists all sellers sorted by name.
-**Output**
+#### GET /sellgood/seller/\
+Lists all sellers sorted by name.\
+**Output**\
 ```python
 [
     {
@@ -87,9 +87,9 @@ Lists all sellers sorted by name.
 ]
 ```
 
-#### GET /sellgood/seller/1/
-**Output**
-Lists seller details.
+#### GET /sellgood/seller/1/\
+**Output**\
+Lists seller details.\
 ```python
 {
     "id": 1,
@@ -102,9 +102,9 @@ Lists seller details.
 }
 ```
 
-**PUT /sellgood/seller/1/**
-Updates all seller data. 
-**Input**
+**PUT /sellgood/seller/1/**\
+Updates all seller data. \
+**Input**\
 ```python
 {
     "id": 1,
@@ -116,7 +116,7 @@ Updates all seller data.
     "plan": 3
 }
 ```
-**Output**
+**Output**\
 ```python
 {
     "id": 1,
@@ -129,16 +129,16 @@ Updates all seller data.
  }
 ```
 
-**PATCH /sellgood/seller/1/**
-Updates seller data partially. 
-**Input**
+**PATCH /sellgood/seller/1/**\
+Updates seller data partially. \
+**Input**\
 ```python
 {
     "id": 1,    
     "name": "Bruce Wayne - The Batman"
 }
 ```
-**Output**
+**Output**\
 ```python
 {
     "id": 1,
@@ -151,5 +151,5 @@ Updates seller data partially.
  }
 ```
 
-**DELETE /sellgood/seller/1/**
-Delete a seller. 
+**DELETE /sellgood/seller/1/**\
+Delete a seller.\
