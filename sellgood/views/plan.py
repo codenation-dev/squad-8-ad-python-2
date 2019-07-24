@@ -1,8 +1,10 @@
+import json
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 from sellgood.models import Plan
 from sellgood.forms import PlanForm
-from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-import json
 
 
 @csrf_exempt

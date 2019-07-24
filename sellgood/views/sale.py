@@ -1,7 +1,8 @@
-from sellgood.models import Sale
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions
 from rest_framework.filters import OrderingFilter
-from django_filters.rest_framework import DjangoFilterBackend
+
+from sellgood.models import Sale
 from sellgood.serializers.sale import SaleSerializer
 
 
