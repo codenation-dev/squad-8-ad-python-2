@@ -1,5 +1,6 @@
 import json
 from decimal import Decimal
+
 from django.test import Client, TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -14,6 +15,28 @@ class SaleViewSetTest(TestCase):
         self.client = Client()
         
         self.seller1, self.seller2 = mommy.make('sellgood.Seller', _quantity=2)
+
+    def test_last_day_month(self):
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-07-01', 
+                                          'amount': 1000.0, 
+                                          'seller': self.seller1.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['date'], '2019-07-31')
+
+    def test_unique_sale_month(self):
+        mommy.make('Sale', date='2019-07-31', seller=self.seller1)
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-07-31', 
+                                          'amount': 1000.0, 
+                                          'seller': self.seller1.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.json()['non_field_errors'], 
+                                         ['The fields seller, date must make a unique set.'])
 
     def test_create_sale(self):
         data = {
@@ -101,5 +124,4 @@ class SaleViewSetTest(TestCase):
 
         self.assertEqual(get_response.status_code,
                          status.HTTP_405_METHOD_NOT_ALLOWED)
-
 

@@ -1,5 +1,5 @@
-from django.conf.urls import url, include
 from django.urls import path
+from django.conf.urls import url, include
 from rest_framework import routers
 
 from sellgood.views import address, commission, plan, sale, seller
