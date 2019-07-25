@@ -174,9 +174,10 @@ Updates seller data partially.
 **DELETE /sellgood/seller/1/**\
 Delete a seller.\
 
-## Sale endpoints
 
-### POST /sellgood/sale/
+### Sale endpoints
+
+**POST /sellgood/sale/**
 
 ```
 # input
@@ -203,7 +204,7 @@ Ps.: In date input, the endpoint updates the day to the last day of the respecti
 
 This endpoint  automaticlly calculates the commision and identifies if the seller should reiceve an e-mail notification based on the respective commision value.
 
-### GET /sellgood/sale/
+**GET /sellgood/sale/**
 
 Returns a list ordered by
 
@@ -227,12 +228,12 @@ Returns a list ordered by
 ]
 ```
 
-### GET /sellgood/sale/52/
+**GET /sellgood/sale/52/**
 
 List sale details
 
 ```
-# input
+# output
 {
     "id": 52,
     "date": "2019-07-31",
@@ -242,7 +243,7 @@ List sale details
 }
 ```
 
-### PUT /sellgood/sale/52/
+**PUT /sellgood/sale/52/**
 
 Updates all sale data.
 
@@ -266,7 +267,7 @@ Updates all sale data.
 
 ```
 
-### PATCH /sellgood/sale/52/
+**PATCH /sellgood/sale/52/**
 
 Updates sale data partially
 
@@ -288,6 +289,147 @@ Updates sale data partially
 }
 ```
 
-### DELETE /sellgood/sale/52/
+**DELETE /sellgood/sale/52/**
 
 Delete a sale.\
+
+### Address endpoints
+
+**POST /address/**
+
+```
+# input
+{
+    "seller": 1,
+    "street": "Batcave Street",
+    "neighborhood": "Manhattan",
+    "city": "Arkham City",
+    "state": "Nova York",
+    "number": "666",
+    "complement": "Apartament 204",
+    "zipcode": "10001"
+}
+```
+
+```
+# output
+{
+    "seller": 1,
+    "street": "Batcave Street",
+    "neighborhood": "Manhattan",
+    "city": "Arkham City",
+    "state": "Nova York",
+    "number": "666",
+    "complement": "Apartament 204",
+    "zipcode": "10001"
+}
+```
+
+**GET /sellgood/address/**
+
+```
+# output
+[
+    {
+        "seller": 1,
+        "street": "Batcave Street",
+        "neighborhood": "Manhattan",
+        "city": "Arkham City",
+        "state": "Nova York",
+        "number": "666",
+        "complement": "Apartament 204",
+        "zipcode": "10001"
+    },
+    {
+        "seller": 2,
+        "street": "1th Ave",
+        "neighborhood": "Manhattan",
+        "city": "New York",
+        "state": "New York",
+        "number": "1",
+        "complement": "The coolest building",
+        "zipcode": "1111111"
+    }
+]
+```
+
+**GET /sellgood/address/1**
+
+List address details. For address endpoints, the "address id" is the "seller id".
+
+```
+# output
+{
+    "seller": 1,
+    "street": "Batcave Street",
+    "neighborhood": "Manhattan",
+    "city": "Arkham City",
+    "state": "Nova York",
+    "number": "666",
+    "complement": "Apartament 204",
+    "zipcode": "10001"
+}
+```
+
+**PUT /sellgood/address/1**
+
+Updates all address data.
+
+```
+# input 
+{
+    "seller": 1,
+    "street": "Batcave Street",
+    "neighborhood": "Manhattan",
+    "city": "Gotham City",
+    "state": "Nova York",
+    "number": "1235",
+    "complement": "Confidential",
+    "zipcode": "2050"
+}
+```
+
+```
+# output 
+{
+    "seller": 1,
+    "street": "Batcave Street",
+    "neighborhood": "Manhattan",
+    "city": "Gotham City",
+    "state": "Nova York",
+    "number": "1235",
+    "complement": "Confidential",
+    "zipcode": "2050"
+}
+
+```
+
+**PATCH /sellgood/address/1/**
+
+Updates address data partially.
+
+```
+# input
+{
+    "street": "Main Street",
+    "zipcode": "4561"
+}
+```
+
+```
+# output 
+{
+    "seller": 1,
+    "street": "Main Street",
+    "neighborhood": "Manhattan",
+    "city": "Gotham City",
+    "state": "Nova York",
+    "number": "1235",
+    "complement": "Confidential",
+    "zipcode": "4561"
+}
+```
+
+**DELETE /sellgood/address/1/**
+
+Delete an address.\
