@@ -79,3 +79,18 @@ class PlanViewSet(TestCase):
         self.assertEqual(response.json()['minimum_amount'], "20500.00")
         self.assertEqual(response.json()['lower_percentage'], "0.08")
         self.assertEqual(response.json()['higher_percentage'], "0.11")
+
+    def test_patch_plan(self):
+        plan1 = mommy.make('sellgood.Plan', name='Entry-Level',
+                            minimum_amount=20500.00)
+        data = {
+            "name": "Platinium",
+        }
+
+        response = self.client.patch(reverse(
+            'sellgood:plan-detail',kwargs={'pk':1}),
+            data=json.dumps(data), content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['name'], 'Platinium')
+        self.assertEqual(response.json()['minimum_amount'], "20500.00")
