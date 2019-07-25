@@ -100,3 +100,11 @@ class PlanViewSet(TestCase):
 
         response = self.client.delete(reverse(
             'sellgood:plan-detail', kwargs={'pk': 1}))
+
+    def test_plan_to_delete_not_found(self):
+        plan1 = mommy.make('sellgood.Plan')
+
+        response = self.client.delete(reverse(
+            'sellgood:plan-detail', kwargs={'pk': 2}))
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
