@@ -35,3 +35,11 @@ class PlanViewSet(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 0)
     
+    def test_method_not_allowed_list(self):
+        response_delete = self.client.delete(reverse('sellgood:plan-list'))
+        response_put = self.client.put(reverse('sellgood:plan-list'))
+
+        self.assertEqual(response_delete.status_code,
+                         status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response_put.status_code,
+                         status.HTTP_405_METHOD_NOT_ALLOWED)
