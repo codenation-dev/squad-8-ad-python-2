@@ -94,3 +94,9 @@ class PlanViewSet(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()['name'], 'Platinium')
         self.assertEqual(response.json()['minimum_amount'], "20500.00")
+
+    def test_delete_plan(self):
+        plan1, plan2 = mommy.make('sellgood.Plan', _quantity=2)
+
+        response = self.client.delete(reverse(
+            'sellgood:plan-detail', kwargs={'pk': 1}))
