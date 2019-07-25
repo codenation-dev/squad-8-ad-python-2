@@ -1,4 +1,3 @@
-from django.urls import path
 from django.conf.urls import url, include
 from rest_framework import routers
 
@@ -12,16 +11,12 @@ router = routers.DefaultRouter()
 router.register(r'address', address.AddressViewSet, base_name='address')
 router.register(r'seller', seller.SellerViewSet, base_name='seller')
 router.register(r'sale', sale.SaleViewSet, base_name='sale')
-router.register(r'commission', 
-                commission.CommissionViewSet, 
+router.register(r'commission',
+                commission.CommissionViewSet,
                 base_name='commission')
+router.register(r'plan', plan.PlanViewSet, base_name='plan')
 
+urlpatterns = [
+    url(r'^', include(router.urls))
+    ]
 
-urlpatterns = [ 
-    url(r'^', include(router.urls)),    
-    # plan urls
-    path('plan', plan.create_plan, name='create_plan'),
-    path('plan/get/<int:id>', plan.read_plan, name='get_plan'),
-    path('plan/update/<int:id>', plan.update_plan, name='update_plan'),
-    path('plan/del/<int:id>', plan.delete_plan, name='delete_plan')
-]

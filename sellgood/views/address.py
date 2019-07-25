@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets
 
 from sellgood.models import Address
 from sellgood.serializers.address import AddressSerializer

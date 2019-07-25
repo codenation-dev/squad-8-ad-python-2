@@ -9,3 +9,4 @@ venv/
 
 # visual studio directory
 .vscode
+.idea
