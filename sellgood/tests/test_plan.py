@@ -108,3 +108,12 @@ class PlanViewSet(TestCase):
             'sellgood:plan-detail', kwargs={'pk': 2}))
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_plan_method_not_allowed_detail(self):
+        plan1 = mommy.make('sellgood.Plan')
+
+        response = self.client.post(reverse(
+            'sellgood:plan-detail', kwargs={'pk': 1}))
+
+        self.assertEqual(response.status_code,
+                         status.HTTP_405_METHOD_NOT_ALLOWED)
