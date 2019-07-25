@@ -173,3 +173,121 @@ Updates seller data partially.
 
 **DELETE /sellgood/seller/1/**\
 Delete a seller.\
+
+## Sale endpoints
+
+### POST /sellgood/sale/
+
+```
+# input
+{
+	"date": "2019-07-31",
+	"amount": 12300.00,
+	"seller": 1
+}
+```
+
+Ps.: In date input, the endpoint updates the day to the last day of the respective month. For instance, if the input date is "2019-07-15", the output date will be "2019-07-31". This endpoint accepts only one sale per month per seller.
+
+```
+# output
+{
+    "id": 50,
+    "date": "2019-07-31",
+    "amount": "12300.00",
+    "commission": "246.00",
+    "seller": 1,
+    "should_notify": false
+}
+```
+
+This endpoint  automaticlly calculates the commision and identifies if the seller should reiceve an e-mail notification based on the respective commision value.
+
+### GET /sellgood/sale/
+
+Returns a list ordered by
+
+```
+# output
+[
+    {
+        "id": 51,
+        "date": "2019-07-31",
+        "amount": "12300.00",
+        "commission": "246.00",
+        "seller": 1
+    },
+    {
+        "id": 52,
+        "date": "2019-07-31",
+        "amount": "15000.00",
+        "commission": "300.00",
+        "seller": 2
+    }
+]
+```
+
+### GET /sellgood/sale/52/
+
+List sale details
+
+```
+# input
+{
+    "id": 52,
+    "date": "2019-07-31",
+    "amount": "15000.00",
+    "commission": "300.00",
+    "seller": 2
+}
+```
+
+### PUT /sellgood/sale/52/
+
+Updates all sale data.
+
+```
+# input 
+{
+    "date": "2019-08-30",
+    "amount": "9800.00",
+    "seller": 2
+}
+```
+```
+# output 
+{
+    "id": 52,
+    "date": "2019-08-30",
+    "amount": "9800.00",
+    "commission": "196.00",
+    "seller": 2
+}
+
+```
+
+### PATCH /sellgood/sale/52/
+
+Updates sale data partially
+
+```
+# input
+{
+    "date": "2019-12-31",
+}
+```
+
+```
+# output 
+{
+    "id": 52,
+    "date": "2019-12-31",
+    "amount": "9800.00",
+    "commission": "196.00",
+    "seller": 2
+}
+```
+
+### DELETE /sellgood/sale/52/
+
+Delete a sale.\
