@@ -43,3 +43,11 @@ class PlanViewSet(TestCase):
                          status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response_put.status_code,
                          status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_number_plan_recorded(self):
+        plan1, plan2, plan3 = mommy.make('sellgood.Plan', _quantity=3)
+        response = self.client.get(reverse('sellgood:plan-list'))
+
+        self.assertEqual(response.status_code,
+                            status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 3)
