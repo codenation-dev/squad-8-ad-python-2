@@ -28,3 +28,10 @@ class PlanViewSet(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.json()['name'], 'Entry-level')
+
+    def test_empty_plan(self):
+        response = self.client.get(reverse('sellgood:plan-list'))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.json()), 0)
+    
