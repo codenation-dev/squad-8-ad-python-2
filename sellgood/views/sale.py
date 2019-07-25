@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter
 
 from sellgood.models import Sale
@@ -12,4 +12,3 @@ class SaleViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filter_fields = {'date': ['year', 'month']}    
     ordering = ['-date']
-    

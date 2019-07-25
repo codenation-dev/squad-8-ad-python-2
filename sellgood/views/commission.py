@@ -1,6 +1,3 @@
-from rest_framework import generics
-
-from sellgood.models import Sale
 from sellgood.views import sale
 from sellgood.serializers.commission import CommissionSerializer
 
