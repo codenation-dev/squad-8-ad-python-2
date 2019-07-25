@@ -51,3 +51,12 @@ class PlanViewSet(TestCase):
         self.assertEqual(response.status_code,
                             status.HTTP_200_OK)
         self.assertEqual(len(response.json()), 3)
+
+    def test_detail_plan(self):
+        plan1 = mommy.make('sellgood.Plan', name='Entry-Level')
+
+        response = self.client.get(reverse(
+            'sellgood:plan-detail', kwargs={'pk':1}))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['name'], 'Entry-Level')
