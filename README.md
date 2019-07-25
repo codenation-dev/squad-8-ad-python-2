@@ -295,7 +295,7 @@ Delete a sale.\
 
 ### Address endpoints
 
-**POST /address/**
+**POST /sellgood/address/**
 
 ```
 # input
