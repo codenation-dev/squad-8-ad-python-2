@@ -99,7 +99,20 @@ class AddressViewSetTest(TestCase):
         self.assertEqual(response.json()['seller'], 2)
 
         response2 = self.client.get(reverse('sellgood:address-detail',
-                                               kwargs={'pk': 2}))
+                                            kwargs={'pk': 2}))
+
+    def test_partially_update_seller(self): 
+        address = mommy.make('Address')         
+        data = {'id': address.seller.id, 
+                'street': 'nowhere'}          
+
+        response = self.client.patch(reverse('sellgood:address-detail',                                             kwargs={'pk': address.seller.id}),
+                                   data=data, 
+                                   content_type='application/json') 
+       
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['street'], 'nowhere')
+            
 
     def test_delete_address(self):
         address1 = mommy.make('sellgood.Address',
