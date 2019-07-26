@@ -2,6 +2,13 @@
 
 This project is a REST API for calculating the monthly commission of each seller according to the commission rule selected at the registration time.
 
+## Prerequisites
+
+Python 3.7.3.\
+```bash
+sudo apt-get install python3.7.3
+```
+
 ## Installation
 
 Clone the project.
