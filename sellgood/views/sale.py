@@ -11,4 +11,4 @@ class SaleViewSet(viewsets.ModelViewSet):
     serializer_class = SaleSerializer  
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filter_fields = {'date': ['year', 'month']}    
-    ordering = ['-date']
+    
