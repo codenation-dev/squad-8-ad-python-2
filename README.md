@@ -6,7 +6,7 @@ This project is a REST API for calculating the monthly commission of each seller
 
 Python 3.7.3.
 ```bash
-sudo apt-get install python3.7.3
+sudo apt-get install python3.7
 ```
 
 ## Installation
