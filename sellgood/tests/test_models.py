@@ -3,6 +3,8 @@ from decimal import Decimal
 from django.test import TestCase
 from model_mommy import mommy
 
+from sellgood.models import Sale
+
 
 class SaleModelTests(TestCase):
     def setUp(self):  
@@ -42,3 +44,12 @@ class SaleModelTests(TestCase):
                          round(Decimal(5000.00), 2))
         self.assertEqual(round(sale2.commission, 2), 
                          round(Decimal(7570.05), 2))
+
+    def test_commission_weighted_average(self):
+        sale = mommy.make('Sale')
+        commissions = [Decimal(5000), Decimal(2000), 
+                       Decimal(3000), Decimal(7000), 
+                       Decimal(1000)]
+        
+        self.assertEqual(sale.commission_weighted_average(commissions), 
+                         Decimal(4600))
