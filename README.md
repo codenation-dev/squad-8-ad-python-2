@@ -36,7 +36,7 @@ Content-Type: application/json
 ### Plan endpoints
 
 **POST /sellgood/plan/**: Creates a plan.\
-**GET /sellgood/plan/**: Lists all plans sorted by name.
+**GET /sellgood/plan/**: Lists all plans sorted by name.\
 **GET /sellgood/plan/{id}/**: Lists plan details.\
 **PUT /sellgood/plan/{id}/**: Updates plan data.\
 **PATCH /sellgood/plan/{id}/**: Partially updates plan data.\
@@ -45,7 +45,7 @@ Content-Type: application/json
 ### Seller endpoints
 
 **POST /sellgood/seller/**: Creates a seller.\
-**GET /sellgood/seller/**: Lists all sellers sorted by name.
+**GET /sellgood/seller/**: Lists all sellers sorted by name.\
 **GET /sellgood/seller/{id}/**: Lists seller details.\
 **GET sellgood/seller/{id}/address/**: Lists seller address.\
 **GET sellgood/seller/{id}/sale/**: Lists seller sales.\
@@ -56,7 +56,7 @@ Content-Type: application/json
 ### Address endpoints
 
 **POST /sellgood/address/**: Creates a address.\
-**GET /sellgood/address/**: Lists all addresses sorted by seller's name.
+**GET /sellgood/address/**: Lists all addresses sorted by seller's name.\
 **GET /sellgood/address/{id}/**: Lists address details.\
 **PUT /sellgood/address/{id}/**: Updates address data.\
 **PATCH /sellgood/address/{id}/**: Partially updates address data.\
@@ -65,7 +65,7 @@ Content-Type: application/json
 ### Sale endpoints
 
 **POST /sellgood/sale/**: Creates a sale.\
-**GET /sellgood/sale/**: Lists all sales sorted by date.
+**GET /sellgood/sale/**: Lists all sales sorted by date.\
 **GET /sellgood/sale/{id}/**: Lists sale details.\
 **PUT /sellgood/sale/{id}/**: Updates sale data.\
 **PATCH /sellgood/sale/{id}/**: Partially updates sale data.\
@@ -73,10 +73,10 @@ Content-Type: application/json
 
 ### Commission endpoints
 
-**GET /sellgood/commission/**: Lists all commissions ranked by highest value.
-**GET /sellgood/commission/?date__year={year}**: Lists all commissions in a specific year ranked by highest value.
-**GET /sellgood/commission/?date__month={month}**: Lists all commissions in a specific month ranked by highest value.
-**GET /sellgood/commission/?date__year={year}&date__month={month}**: Lists all commissions in a specific year and month ranked by highest value.
+**GET /sellgood/commission/**: Lists all commissions ranked by highest value.\
+**GET /sellgood/commission/?date__year={year}**: Lists all commissions in a specific year ranked by highest value.\
+**GET /sellgood/commission/?date__month={month}**: Lists all commissions in a specific month ranked by highest value.\
+**GET /sellgood/commission/?date__year={year}&date__month={month}**: Lists all commissions in a specific year and month ranked by highest value.\
 **GET /sellgood/commission/{id}/**: Lists commissions details.\
 
 ## Observations
