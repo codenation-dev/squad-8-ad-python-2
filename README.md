@@ -85,4 +85,5 @@ In date input, the endpoint updates the day to the last day of the respective mo
 
 This endpoint  automaticlly calculates the commision and identifies if the seller should reiceve an e-mail notification based on the respective commision value.
 
+For Sale PATCH method is required to include the date field.
 
