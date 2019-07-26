@@ -53,6 +53,18 @@ class SellerViewSetTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(response.json(), data)
 
+    def test_partially_update_seller(self): 
+        seller = mommy.make('Seller')         
+        data = {'id': 1,                
+                'age': 40}          
+
+        response = self.client.patch(reverse('sellgood:seller-detail',                                             kwargs={'pk': seller.id}),
+                                   data=data, 
+                                   content_type='application/json') 
+       
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['age'], 40)
+
     def test_delete_seller(self): 
         seller = mommy.make('Seller')                  
 
