@@ -33,403 +33,56 @@ Necessary header for all requests.
 Content-Type: application/json
 ```
 
+### Plan endpoints
+
+**POST /sellgood/plan/**: Creates a plan.\
+**GET /sellgood/plan/**: Lists all plans sorted by name.
+**GET /sellgood/plan/{id}/**: Lists plan details.\
+**PUT /sellgood/plan/{id}/**: Updates plan data.\
+**PATCH /sellgood/plan/{id}/**: Partially updates plan data.\
+**DELETE /sellgood/plan/{id}/**: Deletes a plan.\
+
 ### Seller endpoints
 
-**POST /sellgood/seller/**\
-Creates a seller.
-```python
-# input
-{
-    "cpf": "77711100077",
-    "name": "Bruce Wayne",
-    "age": 30,
-    "phone": "47997001177",
-    "email": "bruce_wayne@wayneenterprises.com",
-    "plan": 3
-}
-```
-```python
-# output
-{
-    "id": 1,
-    "cpf": "77711100077",
-    "name": "Bruce Wayne",
-    "age": 30,
-    "phone": "47997001177",
-    "email": "bruce_wayne@wayneenterprises.com",
-    "plan": 3
- }
-```
-
-**GET /sellgood/seller/**\
-Lists all sellers sorted by name.
-
-```python
-# output
-[
-    {
-        "id": 1,
-        "cpf": "77711100077",
-        "name": "Bruce Wayne",
-        "age": 30,
-        "phone": "47997001177",
-        "email": "bruce_wayne@wayneenterprises.com",
-        "plan": 3
-    }
-    {
-        "id": 3,
-        "cpf": "00022245655",
-        "name": "Peter Parker",
-        "age": 18,
-        "phone": "51999112222",
-        "email": "peter.parker@starkindustries.com",
-        "plan": 1
-    }
-]
-```
-
-**GET /sellgood/seller/1/**\
-Lists seller details.
-```python
-# output
-{
-    "id": 1,
-    "cpf": "77711100077",
-    "name": "Bruce Wayne",
-    "age": 30,
-    "phone": "47997001177",
-    "email": "bruce_wayne@wayneenterprises.com",
-    "plan": 3
-}
-```
-
-**GET sellgood/seller/1/address/**\
-List seller address.
-```python
-# output
-{
-    "seller": 1,
-    "street": "6th Ave",
-    "neighborhood": "Downtown",
-    "city": "Gotham",
-    "state": "Unknown",
-    "number": "13",
-    "complement": "The biggest building",
-    "zipcode": "1300000"
-}
-```
-
-**PUT /sellgood/seller/1/**\
-Updates all seller data.
-
-```python
-# input
-{
-    "id": 1,
-    "cpf": "77711100077",
-    "name": "Bruce Wayne",
-    "age": 33,
-    "phone": "47997001100",
-    "email": "bruce_wayne@wayneenterprises.com",
-    "plan": 3
-}
-```
-
-```python
-# output
-{
-    "id": 1,
-    "cpf": "77711100077",
-    "name": "Bruce Wayne",
-    "age": 33,
-    "phone": "47997001100",
-    "email": "bruce_wayne@wayneenterprises.com",
-    "plan": 3
- }
-```
-
-**PATCH /sellgood/seller/1/**\
-Updates seller data partially.
-```python
-# input
-{
-    "id": 1,    
-    "name": "Bruce Wayne - The Batman"
-}
-```
-
-```python
-# output
-{
-    "id": 1,
-    "cpf": "77711100077",
-    "name": "Bruce Wayne - The Batman",
-    "age": 33,
-    "phone": "47997001100",
-    "email": "bruce_wayne@wayneenterprises.com",
-    "plan": 3
- }
-```
-
-**DELETE /sellgood/seller/1/**\
-Delete a seller.\
-
-
-### Sale endpoints
-
-**POST /sellgood/sale/**
-
-```
-# input
-{
-	"date": "2019-07-31",
-	"amount": 12300.00,
-	"seller": 1
-}
-```
-
-Ps.: In date input, the endpoint updates the day to the last day of the respective month. For instance, if the input date is "2019-07-15", the output date will be "2019-07-31". This endpoint accepts only one sale per month per seller.
-
-```
-# output
-{
-    "id": 50,
-    "date": "2019-07-31",
-    "amount": "12300.00",
-    "commission": "246.00",
-    "seller": 1,
-    "should_notify": false
-}
-```
-
-This endpoint  automaticlly calculates the commision and identifies if the seller should reiceve an e-mail notification based on the respective commision value.
-
-**GET /sellgood/sale/**
-
-Returns a list ordered by
-
-```
-# output
-[
-    {
-        "id": 51,
-        "date": "2019-07-31",
-        "amount": "12300.00",
-        "commission": "246.00",
-        "seller": 1
-    },
-    {
-        "id": 52,
-        "date": "2019-07-31",
-        "amount": "15000.00",
-        "commission": "300.00",
-        "seller": 2
-    }
-]
-```
-
-**GET /sellgood/sale/52/**
-
-List sale details
-
-```
-# output
-{
-    "id": 52,
-    "date": "2019-07-31",
-    "amount": "15000.00",
-    "commission": "300.00",
-    "seller": 2
-}
-```
-
-**PUT /sellgood/sale/52/**
-
-Updates all sale data.
-
-```
-# input 
-{
-    "date": "2019-08-30",
-    "amount": "9800.00",
-    "seller": 2
-}
-```
-```
-# output 
-{
-    "id": 52,
-    "date": "2019-08-30",
-    "amount": "9800.00",
-    "commission": "196.00",
-    "seller": 2
-}
-
-```
-
-**PATCH /sellgood/sale/52/**
-
-Updates sale data partially
-
-```
-# input
-{
-    "date": "2019-12-31",
-}
-```
-
-```
-# output 
-{
-    "id": 52,
-    "date": "2019-12-31",
-    "amount": "9800.00",
-    "commission": "196.00",
-    "seller": 2
-}
-```
-
-**DELETE /sellgood/sale/52/**
-
-Delete a sale.\
+**POST /sellgood/seller/**: Creates a seller.\
+**GET /sellgood/seller/**: Lists all sellers sorted by name.
+**GET /sellgood/seller/{id}/**: Lists seller details.\
+**GET sellgood/seller/{id}/address/**: Lists seller address.\
+**GET sellgood/seller/{id}/sale/**: Lists seller sales.\
+**PUT /sellgood/seller/{id}/**: Updates seller data.\
+**PATCH /sellgood/seller/{id}/**: Partially updates seller data.\
+**DELETE /sellgood/seller/{id}/**: Deletes a seller.\
 
 ### Address endpoints
 
-**POST /sellgood/address/**
+**POST /sellgood/address/**: Creates a address.\
+**GET /sellgood/address/**: Lists all addresses sorted by seller's name.
+**GET /sellgood/address/{id}/**: Lists address details.\
+**PUT /sellgood/address/{id}/**: Updates address data.\
+**PATCH /sellgood/address/{id}/**: Partially updates address data.\
+**DELETE /sellgood/address/{id}/**: Deletes a address.\
 
-```
-# input
-{
-    "seller": 1,
-    "street": "Batcave Street",
-    "neighborhood": "Manhattan",
-    "city": "Arkham City",
-    "state": "Nova York",
-    "number": "666",
-    "complement": "Apartament 204",
-    "zipcode": "10001"
-}
-```
+### Sale endpoints
 
-```
-# output
-{
-    "seller": 1,
-    "street": "Batcave Street",
-    "neighborhood": "Manhattan",
-    "city": "Arkham City",
-    "state": "Nova York",
-    "number": "666",
-    "complement": "Apartament 204",
-    "zipcode": "10001"
-}
-```
+**POST /sellgood/sale/**: Creates a sale.\
+**GET /sellgood/sale/**: Lists all sales sorted by date.
+**GET /sellgood/sale/{id}/**: Lists sale details.\
+**PUT /sellgood/sale/{id}/**: Updates sale data.\
+**PATCH /sellgood/sale/{id}/**: Partially updates sale data.\
+**DELETE /sellgood/sale/{id}/**: Deletes a sale.\
 
-**GET /sellgood/address/**
+### Commission endpoints
 
-```
-# output
-[
-    {
-        "seller": 1,
-        "street": "Batcave Street",
-        "neighborhood": "Manhattan",
-        "city": "Arkham City",
-        "state": "Nova York",
-        "number": "666",
-        "complement": "Apartament 204",
-        "zipcode": "10001"
-    },
-    {
-        "seller": 2,
-        "street": "1th Ave",
-        "neighborhood": "Manhattan",
-        "city": "New York",
-        "state": "New York",
-        "number": "1",
-        "complement": "The coolest building",
-        "zipcode": "1111111"
-    }
-]
-```
+**GET /sellgood/commission/**: Lists all commissions ranked by highest value.
+**GET /sellgood/commission/?date__year={year}**: Lists all commissions in a specific year ranked by highest value.
+**GET /sellgood/commission/?date__month={month}**: Lists all commissions in a specific month ranked by highest value.
+**GET /sellgood/commission/?date__year={year}&date__month={month}**: Lists all commissions in a specific year and month ranked by highest value.
+**GET /sellgood/commission/{id}/**: Lists commissions details.\
 
-**GET /sellgood/address/1**
+## Observations
 
-List address details. For address endpoints, the "address id" is the "seller id".
+In date input, the endpoint updates the day to the last day of the respective month. For instance, if the input date is "2019-07-15", the output date will be "2019-07-31". This endpoint accepts only one sale per month per seller.
 
-```
-# output
-{
-    "seller": 1,
-    "street": "Batcave Street",
-    "neighborhood": "Manhattan",
-    "city": "Arkham City",
-    "state": "Nova York",
-    "number": "666",
-    "complement": "Apartament 204",
-    "zipcode": "10001"
-}
-```
+This endpoint  automaticlly calculates the commision and identifies if the seller should reiceve an e-mail notification based on the respective commision value.
 
-**PUT /sellgood/address/1**
 
-Updates all address data.
-
-```
-# input 
-{
-    "seller": 1,
-    "street": "Batcave Street",
-    "neighborhood": "Manhattan",
-    "city": "Gotham City",
-    "state": "Nova York",
-    "number": "1235",
-    "complement": "Confidential",
-    "zipcode": "2050"
-}
-```
-
-```
-# output 
-{
-    "seller": 1,
-    "street": "Batcave Street",
-    "neighborhood": "Manhattan",
-    "city": "Gotham City",
-    "state": "Nova York",
-    "number": "1235",
-    "complement": "Confidential",
-    "zipcode": "2050"
-}
-
-```
-
-**PATCH /sellgood/address/1/**
-
-Updates address data partially.
-
-```
-# input
-{
-    "street": "Main Street",
-    "zipcode": "4561"
-}
-```
-
-```
-# output 
-{
-    "seller": 1,
-    "street": "Main Street",
-    "neighborhood": "Manhattan",
-    "city": "Gotham City",
-    "state": "Nova York",
-    "number": "1235",
-    "complement": "Confidential",
-    "zipcode": "4561"
-}
-```
-
-**DELETE /sellgood/address/1/**
-
-Delete an address.\
