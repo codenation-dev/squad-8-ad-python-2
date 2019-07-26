@@ -103,6 +103,19 @@ class SaleViewSetTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json()['id'], 1)
         self.assertEqual(response.json()['seller'], 2)
+
+    def test_partially_update_seller(self): 
+        sale = mommy.make('Sale', date='2019-01-01')         
+        data = {'id': sale.id, 
+                'date': '2019-01-01',               
+                'amount': 150.0}          
+
+        response = self.client.patch(reverse('sellgood:sale-detail',                                             kwargs={'pk': sale.id}),
+                                   data=data, 
+                                   content_type='application/json') 
+       
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.json()['amount'], '150.00')
     
     def test_delete_sale(self):
         sale1 = mommy.make('sellgood.Sale', 
