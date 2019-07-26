@@ -67,7 +67,7 @@ class Sale(models.Model):
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['date']
+        ordering = ['-date']
         unique_together = ['seller', 'date']
 
     def __str__(self):
