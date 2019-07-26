@@ -138,3 +138,239 @@ class SaleViewSetTest(TestCase):
         self.assertEqual(get_response.status_code,
                          status.HTTP_405_METHOD_NOT_ALLOWED)
 
+
+class NotifyTest(TestCase):
+    def setUp(self):
+        plan = mommy.make('Plan',
+                          minimum_amount=Decimal(10000.0),
+                          lower_percentage=Decimal(0.05),
+                          higher_percentage=Decimal(0.1))
+        
+        self.seller = mommy.make('Seller', 
+                                 plan=plan, 
+                                 email='sellgood@gmail.com')
+
+    def test_one_commission(self):
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-01-31', 
+                                          'amount': 1000.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], False)
+
+    def test_two_commissions_above(self):
+        mommy.make('Sale', 
+                   date='2019-01-31', 
+                   amount=1000.00, 
+                   seller=self.seller)
+
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-02-28', 
+                                          'amount': 2000.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], False)
+
+    def test_two_commissions_bellow(self):
+        mommy.make('Sale', 
+                   date='2019-01-31', 
+                   amount=1000.00, 
+                   seller=self.seller)
+
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-02-28', 
+                                          'amount': 500.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], True)
+
+    def test_three_commissions_above(self):
+        mommy.make('Sale', 
+                   date='2019-01-31', 
+                   amount=1000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-02-28', 
+                   amount=2000.00, 
+                   seller=self.seller)
+
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-03-30', 
+                                          'amount': 3000.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], False)
+
+    def test_three_commissions_bellow(self):
+        mommy.make('Sale', 
+                   date='2019-01-31', 
+                   amount=1000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-02-28', 
+                   amount=2000.00, 
+                   seller=self.seller)
+
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-03-30', 
+                                          'amount': 500.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], True)
+
+    def test_four_commissions_above(self):
+        mommy.make('Sale', 
+                   date='2019-01-31', 
+                   amount=2000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-02-28', 
+                   amount=3000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-03-30', 
+                   amount=4000.00, 
+                   seller=self.seller)
+
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-04-30', 
+                                          'amount': 3000.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], False)
+
+    def test_four_commissions_bellow(self):
+        mommy.make('Sale', 
+                   date='2019-01-31', 
+                   amount=2000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-02-28', 
+                   amount=3000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-03-30', 
+                   amount=4000.00, 
+                   seller=self.seller)
+
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-04-30', 
+                                          'amount': 1000.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], True)
+
+    def test_five_commissions_above(self):
+        mommy.make('Sale', 
+                   date='2019-01-31', 
+                   amount=2000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-02-28', 
+                   amount=3000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-03-30', 
+                   amount=4000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-04-30', 
+                   amount=3000.00, 
+                   seller=self.seller)
+
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-05-31', 
+                                          'amount': 4000.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], False)
+
+    def test_five_commissions_bellow(self):
+        mommy.make('Sale', 
+                   date='2019-01-31', 
+                   amount=2000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-02-28', 
+                   amount=3000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-03-30', 
+                   amount=4000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-04-30', 
+                   amount=3000.00, 
+                   seller=self.seller)
+
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-05-31', 
+                                          'amount': 2000.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], True)
+
+    def test_six_commissions_limit(self):
+        mommy.make('Sale', 
+                   date='2019-01-31', 
+                   amount=7000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-02-28', 
+                   amount=3000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-03-30', 
+                   amount=4000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-04-30', 
+                   amount=3000.00, 
+                   seller=self.seller)
+
+        mommy.make('Sale', 
+                   date='2019-05-31', 
+                   amount=4000.00, 
+                   seller=self.seller)
+
+        response = self.client.post(reverse('sellgood:sale-list'),
+                                    data={'date': '2019-06-30', 
+                                          'amount': 5000.00, 
+                                          'seller': self.seller.id},
+                                    content_type='application/json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()['notify'], False)
