@@ -2,7 +2,8 @@ from decimal import Decimal
 
 from django.db import models
 from django.core.validators import EmailValidator, MinValueValidator
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 class Plan(models.Model):
     name = models.CharField(max_length=50)
@@ -81,3 +82,17 @@ class Sale(models.Model):
             self.commission = Decimal(self.amount)*plan.lower_percentage
 
         super().save(*args, **kwargs)
+
+    def notify(self, *args, **kwargs):
+        sale_commission = self.commission
+        if sale_commission < 200.00:
+            sould_notify = True
+            subject = 'BAD Performance'
+            message = 'You need to work harder, you are below the average'
+            from_email = settings.EMAIL_HOST_USER
+            to_list = ['sellerxx@gmail.com']
+            send_mail(subject, message, from_email, to_list,
+                     fail_silently=False)
+            return True
+        else:
+            return False
