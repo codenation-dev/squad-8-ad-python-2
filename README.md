@@ -69,7 +69,7 @@ DELETE /sellgood/plan/{id}/
 
 ### Seller endpoints
 
-Creates a plan.
+Creates a seller.
 ```
 POST /sellgood/seller/
 ```
