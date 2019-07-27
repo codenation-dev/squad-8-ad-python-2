@@ -3,6 +3,7 @@ import dj_database_url
 
 from .base import *
 
+ALLOWED_HOSTS = ['.herokuapp.com']
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
