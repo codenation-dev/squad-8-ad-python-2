@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -14,10 +14,19 @@ class SellerViewSet(viewsets.ModelViewSet):
 
     @action(detail=True)
     def address(self, request, pk=None):
-        serializer = AddressSerializer(Address.objects.get(pk=pk))
-        return Response(serializer.data)
+        try:
+            serializer = AddressSerializer(Address.objects.get(pk=pk))
+            return Response(serializer.data)
+        except:
+            return Response({'detail': 'Not found.'},
+                             status=status.HTTP_200_OK)
     
     @action(detail=True)
     def sale(self, request, pk=None):
-        serializer = SaleSerializer(Sale.objects.filter(seller_id=pk), many=True)
-        return Response(serializer.data)
+        query = Sale.objects.filter(seller_id=pk)
+        serializer = SaleSerializer(query, many=True)
+        if query:
+            return Response(serializer.data)
+        else:
+            return Response({'detail': 'Not found.'}, status=status.HTTP_200_OK)
+        
