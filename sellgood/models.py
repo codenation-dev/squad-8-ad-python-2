@@ -84,15 +84,31 @@ class Sale(models.Model):
         super().save(*args, **kwargs)
 
     def notify(self, *args, **kwargs):
-        sale_commission = self.commission
-        if sale_commission < 200.00:
-            sould_notify = True
-            subject = 'BAD Performance'
-            message = 'You need to work harder, you are below the average'
-            from_email = settings.EMAIL_HOST_USER
-            to_list = ['sellerxx@gmail.com']
-            send_mail(subject, message, from_email, to_list,
-                     fail_silently=False)
-            return True
-        else:
+        seller = Seller.objects.get(pk=self.seller.id)
+        sales = seller.sale_set.all()[:5]
+
+        if len(sales) > 1:
+            commissions = [sale.commission for sale in sales]
+                        
+            weighted_average = self.commission_weighted_average(commissions)
+            minimum = weighted_average-(weighted_average*Decimal(0.1))
+            
+            if self.commission <= minimum:                
+                subject = 'Commission performance tracking'
+                message = (f'Hello {self.seller.name}.\r\n\r\n'
+                           'You need to work harder, you are below the'   'average!')
+                send_mail(subject, message, 
+                          settings.EMAIL_HOST_USER, 
+                          [self.seller.email])
+                return True            
             return False
+        return False
+
+    def commission_weighted_average(self, commissions):    
+        sum_weighted_terms = 0
+        sum_terms = 0
+        for weight, amount in enumerate(sorted(commissions), 1):
+                sum_weighted_terms += Decimal(weight)*amount
+                sum_terms += Decimal(weight)
+        return sum_weighted_terms/sum_terms  
+ 

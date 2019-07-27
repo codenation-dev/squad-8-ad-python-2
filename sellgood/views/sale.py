@@ -20,8 +20,7 @@ class SaleViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         data = serializer.data
         data['notify'] = sale.notify()
-        return Response(data, status=status.HTTP_201_CREATED,
-                            headers=headers)
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         instance = serializer.save()
