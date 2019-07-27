@@ -23,6 +23,10 @@ class SellerViewSet(viewsets.ModelViewSet):
     
     @action(detail=True)
     def sale(self, request, pk=None):
-        serializer = SaleSerializer(Sale.objects.filter(seller_id=pk), 
-        return Response(serializer.data)
+        query = Sale.objects.filter(seller_id=pk)
+        serializer = SaleSerializer(query, many=True)
+        if query:
+            return Response(serializer.data)
+        else:
+            return Response({'detail': 'Not found.'}, status=status.HTTP_200_OK)
         
