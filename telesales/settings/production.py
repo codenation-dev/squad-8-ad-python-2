@@ -1,11 +1,13 @@
 import os
+
 import dj_database_url
+from decouple import config
 
 from .base import *
 
 ALLOWED_HOSTS = ['.herokuapp.com']
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = False
 
@@ -20,5 +22,5 @@ DATABASES = {
     'default': dj_database_url.config()
 }
 
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config(('EMAIL_HOST_PASSWORD')
