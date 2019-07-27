@@ -42,49 +42,142 @@ Content-Type: application/json
 
 ### Plan endpoints
 
-**POST /sellgood/plan/**: Creates a plan.\
-**GET /sellgood/plan/**: Lists all plans sorted by name.\
-**GET /sellgood/plan/{id}/**: Lists plan details.\
-**PUT /sellgood/plan/{id}/**: Updates plan data.\
-**PATCH /sellgood/plan/{id}/**: Partially updates plan data.\
-**DELETE /sellgood/plan/{id}/**: Deletes a plan.\
+Creates a plan.
+```
+POST /sellgood/plan/
+```
+Lists all plans sorted by name.
+```
+GET /sellgood/plan/
+```
+Lists plan details.
+```
+GET /sellgood/plan/{id}/
+```
+Updates plan data.
+```
+PUT /sellgood/plan/{id}/
+```
+Partially updates plan data.
+```
+PATCH /sellgood/plan/{id}/
+```
+Deletes a plan
+```
+DELETE /sellgood/plan/{id}/
+```
 
 ### Seller endpoints
 
-**POST /sellgood/seller/**: Creates a seller.\
-**GET /sellgood/seller/**: Lists all sellers sorted by name.\
-**GET /sellgood/seller/{id}/**: Lists seller details.\
-**GET sellgood/seller/{id}/address/**: Lists seller address.\
-**GET sellgood/seller/{id}/sale/**: Lists seller sales.\
-**PUT /sellgood/seller/{id}/**: Updates seller data.\
-**PATCH /sellgood/seller/{id}/**: Partially updates seller data.\
-**DELETE /sellgood/seller/{id}/**: Deletes a seller.\
+Creates a plan.
+```
+POST /sellgood/seller/
+```
+Lists all sellers sorted by name.
+```
+GET /sellgood/seller/
+```
+Lists seller details.
+```
+GET /sellgood/seller/{id}/
+```
+Lists seller address.
+```
+GET sellgood/seller/{id}/address/
+```
+Lists seller sales.
+```
+GET sellgood/seller/{id}/sale/
+```
+Updates seller data.
+```
+PUT /sellgood/seller/{id}/
+```
+Partially updates seller data.
+```
+PATCH /sellgood/seller/{id}/
+```
+Deletes a seller
+```
+DELETE /sellgood/seller/{id}/
+```
 
 ### Address endpoints
 
-**POST /sellgood/address/**: Creates a address.\
-**GET /sellgood/address/**: Lists all addresses sorted by seller's name.\
-**GET /sellgood/address/{id}/**: Lists address details.\
-**PUT /sellgood/address/{id}/**: Updates address data.\
-**PATCH /sellgood/address/{id}/**: Partially updates address data.\
-**DELETE /sellgood/address/{id}/**: Deletes a address.\
+Creates a address.
+```
+POST /sellgood/address/
+```
+Lists all addresses sorted by name.
+```
+GET /sellgood/address/
+```
+Lists address details.
+```
+GET /sellgood/address/{id}/
+```
+Updates address data.
+```
+PUT /sellgood/address/{id}/
+```
+Partially updates address data.
+```
+PATCH /sellgood/address/{id}/
+```
+Deletes a address
+```
+DELETE /sellgood/address/{id}/
+```
 
 ### Sale endpoints
 
-**POST /sellgood/sale/**: Creates a sale.\
-**GET /sellgood/sale/**: Lists all sales sorted by date.\
-**GET /sellgood/sale/{id}/**: Lists sale details.\
-**PUT /sellgood/sale/{id}/**: Updates sale data.\
-**PATCH /sellgood/sale/{id}/**: Partially updates sale data.\
-**DELETE /sellgood/sale/{id}/**: Deletes a sale.\
+Creates a sale.
+```
+POST /sellgood/sale/
+```
+Lists all sales sorted by name.
+```
+GET /sellgood/sale/
+```
+Lists sale details.
+```
+GET /sellgood/sale/{id}/
+```
+Updates sale data.
+```
+PUT /sellgood/sale/{id}/
+```
+Partially updates sale data.
+```
+PATCH /sellgood/sale/{id}/
+```
+Deletes a sale
+```
+DELETE /sellgood/sale/{id}/
+```
 
 ### Commission endpoints
 
-**GET /sellgood/commission/**: Lists all commissions ranked by highest value.\
-**GET /sellgood/commission/?date__year={year}**: Lists all commissions in a specific year ranked by highest value.\
-**GET /sellgood/commission/?date__month={month}**: Lists all commissions in a specific month ranked by highest value.\
-**GET /sellgood/commission/?date__year={year}&date__month={month}**: Lists all commissions in a specific year and month ranked by highest value.\
-**GET /sellgood/commission/{id}/**: Lists commissions details.\
+Lists all commissions sorted by name.
+```
+GET /sellgood/commission/
+```
+Lists commissions details.
+```
+GET /sellgood/commissions/{id}/
+```
+Lists all commissions in a specific year ranked by highest value.
+```
+GET /sellgood/commission/?date__year={year}
+```
+Lists all commissions in a specific month ranked by highest value.
+```
+GET /sellgood/commission/?date__month={month}
+```
+Lists all commissions in a specific year and month ranked by highest value.
+```
+GET /sellgood/commission/?date__year={year}&date__month={month}
+```
 
 ## Observations
 
@@ -94,3 +187,4 @@ This endpoint  automaticlly calculates the commision and identifies if the selle
 
 For Sale PATCH method is required to include the date field.
 
+Global variables starting with EMAIL_ in the setting.py file located in the telesales package must be updated with the sender information to perform email notification.
