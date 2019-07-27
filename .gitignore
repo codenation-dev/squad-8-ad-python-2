@@ -9,4 +9,6 @@ venv/
 
 # visual studio directory
 .vscode
-.idea
+
+# sqlite3 database
+db.sqlite3
