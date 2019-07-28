@@ -2,7 +2,7 @@
 
 This project is a REST API for calculating the monthly commission of each seller according to the commission rule selected at the registration time.
 
-SellGood REST API [link](http://telesale.herokuapp.com/sellgood/).
+SellGood REST API link soon.
 
 ## Prerequisites
 
@@ -36,10 +36,15 @@ Starting development server at http://127.0.0.1:8000/.
 ```bash
 python manage.py runserver
 ```
-
-Necessary header for all requests.
+Creating a superuser.
+```bash
+python manage.py createsuperuser
 ```
-Content-Type: application/json
+
+## Tests
+
+```bash
+python manage.py test sellgood
 ```
 
 ### Plan endpoints
