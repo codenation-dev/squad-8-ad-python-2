@@ -2,6 +2,8 @@
 
 This project is a REST API for calculating the monthly commission of each seller according to the commission rule selected at the registration time.
 
+SellGood REST API [link](http://telesale.herokuapp.com/sellgood/)
+
 ## Prerequisites
 
 Python 3.7.3.
@@ -187,4 +189,4 @@ This endpoint  automaticlly calculates the commision and identifies if the selle
 
 For Sale PATCH method is required to include the date field.
 
-Global variables starting with EMAIL_ in the setting.py file located in the telesales package must be updated with the sender information to perform email notification.
+Global variables starting with EMAIL_* in the development.py file located in the telesales.settings package must be updated with the sender information and the seller's email must be an existing one to perform email notification.
