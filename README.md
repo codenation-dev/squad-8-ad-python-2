@@ -2,7 +2,7 @@
 
 This project is a REST API for calculating the monthly commission of each seller according to the commission rule selected at the registration time.
 
-SellGood REST API link soon.
+SellGood REST API [link](https://telesale.herokuapp.com/sellgood/). Only authenticated users can use all available functionality. 
 
 ## Prerequisites
 
